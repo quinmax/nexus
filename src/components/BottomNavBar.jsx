@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, TouchableOpacity, StyleSheet, Dimensions } from 'react-native';
+import { View, TouchableOpacity, Text, StyleSheet, Dimensions } from 'react-native';
 
 // Import your JSX icon components
 import ProfileIcon from '../assets/ProfileIcon.jsx';
@@ -26,6 +26,7 @@ const BottomNavBar = ({ navigation }) => {
           height={styles.icon.height}
           color={styles.icon.tintColor}
         />
+        <Text style={styles.navText}>Profile</Text>
       </TouchableOpacity>
 
       <TouchableOpacity onPress={navigateToSearch} style={styles.navItem}>
@@ -34,6 +35,7 @@ const BottomNavBar = ({ navigation }) => {
           height={styles.icon.height}
           color={styles.icon.tintColor}
         />
+        <Text style={styles.navText}>Wallet</Text>
       </TouchableOpacity>
 
       <TouchableOpacity onPress={navigateToAddPost} style={[styles.navItem, styles.centralNavItem]}>
@@ -42,6 +44,7 @@ const BottomNavBar = ({ navigation }) => {
           height={styles.centralIcon.height}
           color={styles.centralIcon.tintColor}
         />
+        <Text style={styles.navText}>History</Text>
       </TouchableOpacity>
 
       <TouchableOpacity onPress={navigateToNotifications} style={styles.navItem}>
@@ -50,6 +53,7 @@ const BottomNavBar = ({ navigation }) => {
           height={styles.icon.height}
           color={styles.icon.tintColor}
         />
+        <Text style={styles.navText}>Exchange</Text>
       </TouchableOpacity>
 
       <TouchableOpacity onPress={navigateToProfile} style={styles.navItem}>
@@ -58,6 +62,7 @@ const BottomNavBar = ({ navigation }) => {
           height={styles.icon.height}
           color={styles.icon.tintColor}
         />
+        <Text style={styles.navText}>Help</Text>
       </TouchableOpacity>
     </View>
   );
@@ -69,7 +74,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
     alignItems: 'center',
     backgroundColor: '#1c1c1e', // Dark background for the navbar
-    height: 60, // Standard height for a nav bar
+    height: 70, // Increased height to accommodate text
     borderTopWidth: 1,
     borderTopColor: '#333333', // Subtle top border
     position: 'absolute', // To position it at the bottom
@@ -82,6 +87,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
+    // flexDirection: 'column', // Default is column for View, but good to be explicit if needed
   },
   icon: {
     width: 24,
@@ -95,6 +101,11 @@ const styles = StyleSheet.create({
     width: 30, // Larger for a central action button
     height: 30,
     tintColor: '#007AFF', // Example: A different color for the central icon - will be passed as 'color' prop
+  },
+  navText: {
+    color: '#8e8e93', // Same as default icon color, or choose another
+    fontSize: 10,
+    marginTop: 4, // Space between icon and text
   },
 });
 
