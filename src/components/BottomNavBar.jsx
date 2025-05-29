@@ -1,5 +1,12 @@
 import React from 'react';
-import { View, TouchableOpacity, Image, StyleSheet, Dimensions } from 'react-native';
+import { View, TouchableOpacity, StyleSheet, Dimensions } from 'react-native';
+
+// Import your JSX icon components
+import ProfileIcon from '../assets/ProfileIcon.jsx';
+import WalletIcon from '../assets/WalletIcon.jsx';
+import HistoryIcon from '../assets/HistoryIcon.jsx';
+import ExchangeIcon from '../assets/ExchangeIcon.jsx';
+import HelpIcon from '../assets/HelpIcon.jsx';
 
 const { width } = Dimensions.get('window');
 
@@ -14,37 +21,42 @@ const BottomNavBar = ({ navigation }) => {
   return (
     <View style={styles.navBarContainer}>
       <TouchableOpacity onPress={navigateToHome} style={styles.navItem}>
-        <Image
-          source={require('../assets/profile_icon.svg')} // Replace with your actual icon path
-          style={styles.icon}
+        <ProfileIcon
+          width={styles.icon.width}
+          height={styles.icon.height}
+          color={styles.icon.tintColor}
         />
       </TouchableOpacity>
 
       <TouchableOpacity onPress={navigateToSearch} style={styles.navItem}>
-        <Image
-          source={require('../assets/wallet_icon.svg')} // Replace with your actual icon path
-          style={styles.icon}
+        <WalletIcon
+          width={styles.icon.width}
+          height={styles.icon.height}
+          color={styles.icon.tintColor}
         />
       </TouchableOpacity>
 
       <TouchableOpacity onPress={navigateToAddPost} style={[styles.navItem, styles.centralNavItem]}>
-        <Image
-          source={require('../assets/history_icon.svg')} // Replace with your actual icon path
-          style={styles.centralIcon}
+        <HistoryIcon
+          width={styles.centralIcon.width}
+          height={styles.centralIcon.height}
+          color={styles.centralIcon.tintColor}
         />
       </TouchableOpacity>
 
       <TouchableOpacity onPress={navigateToNotifications} style={styles.navItem}>
-        <Image
-          source={require('../assets/exchange_icon.svg')} // Replace with your actual icon path
-          style={styles.icon}
+        <ExchangeIcon
+          width={styles.icon.width}
+          height={styles.icon.height}
+          color={styles.icon.tintColor}
         />
       </TouchableOpacity>
 
       <TouchableOpacity onPress={navigateToProfile} style={styles.navItem}>
-        <Image
-          source={require('../assets/help_icon.svg')} // Replace with your actual icon path
-          style={styles.icon}
+        <HelpIcon
+          width={styles.icon.width}
+          height={styles.icon.height}
+          color={styles.icon.tintColor}
         />
       </TouchableOpacity>
     </View>
@@ -74,7 +86,7 @@ const styles = StyleSheet.create({
   icon: {
     width: 24,
     height: 24,
-    tintColor: '#8e8e93', // Default icon color (iOS gray)
+    tintColor: '#8e8e93', // Default icon color (iOS gray) - will be passed as 'color' prop
   },
   centralNavItem: {
     // You might want to style the central button differently
@@ -82,7 +94,7 @@ const styles = StyleSheet.create({
   centralIcon: {
     width: 30, // Larger for a central action button
     height: 30,
-    tintColor: '#007AFF', // Example: A different color for the central icon
+    tintColor: '#007AFF', // Example: A different color for the central icon - will be passed as 'color' prop
   },
 });
 
