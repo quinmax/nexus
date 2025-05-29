@@ -15,35 +15,35 @@ const BottomNavBar = ({ navigation }) => {
     <View style={styles.navBarContainer}>
       <TouchableOpacity onPress={navigateToHome} style={styles.navItem}>
         <Image
-          source={require('../assets/home_icon.png')} // Replace with your actual icon path
+          source={require('../assets/profile_icon.svg')} // Replace with your actual icon path
           style={styles.icon}
         />
       </TouchableOpacity>
 
       <TouchableOpacity onPress={navigateToSearch} style={styles.navItem}>
         <Image
-          source={require('../assets/search_icon.png')} // Replace with your actual icon path
+          source={require('../assets/wallet_icon.svg')} // Replace with your actual icon path
           style={styles.icon}
         />
       </TouchableOpacity>
 
       <TouchableOpacity onPress={navigateToAddPost} style={[styles.navItem, styles.centralNavItem]}>
         <Image
-          source={require('../assets/add_post_icon.png')} // Replace with your actual icon path
+          source={require('../assets/history_icon.svg')} // Replace with your actual icon path
           style={styles.centralIcon}
         />
       </TouchableOpacity>
 
       <TouchableOpacity onPress={navigateToNotifications} style={styles.navItem}>
         <Image
-          source={require('../assets/notifications_icon.png')} // Replace with your actual icon path
+          source={require('../assets/exchange_icon.svg')} // Replace with your actual icon path
           style={styles.icon}
         />
       </TouchableOpacity>
 
       <TouchableOpacity onPress={navigateToProfile} style={styles.navItem}>
         <Image
-          source={require('../assets/profile_icon.png')} // Replace with your actual icon path
+          source={require('../assets/help_icon.svg')} // Replace with your actual icon path
           style={styles.icon}
         />
       </TouchableOpacity>
