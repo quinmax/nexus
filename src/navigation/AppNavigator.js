@@ -4,7 +4,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 // Import your screens
 import Login from '../screens/Login';
 import Register from '../screens/Register';
-import Blank from '../screens/Blank';
+import Blank from '../screens/Blank.jsx';
 
 
 const Stack = createStackNavigator();
