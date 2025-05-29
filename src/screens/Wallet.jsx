@@ -124,7 +124,8 @@ const styles = StyleSheet.create({
   },
   balanceSectionContainer: {
     paddingHorizontal: 20,
-    paddingVertical: 25,
+    paddingTop: 25, // Keep original top padding
+    paddingBottom: 10, // Reduce bottom padding
     alignItems: 'flex-start',
   },
   balanceLabel: {
@@ -143,7 +144,7 @@ const styles = StyleSheet.create({
   },
   actionButtonContainer: {
     paddingHorizontal: 20,
-    paddingVertical: 15, // Add some spacing around the button
+    paddingVertical: 5, // Further reduce vertical spacing for this container
     alignItems: 'stretch', // Make button take full width if desired, or 'center'
   },
   sendButton: {
