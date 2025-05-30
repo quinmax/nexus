@@ -124,8 +124,8 @@ const styles = StyleSheet.create({
   },
   balanceSectionContainer: {
     paddingHorizontal: 20,
-    paddingTop: 25, // Keep original top padding
-    paddingBottom: 10, // Reduce bottom padding
+    paddingTop: 25,
+    paddingBottom: 5, // Further reduced bottom padding to decrease space above the send button
     alignItems: 'flex-start',
   },
   balanceLabel: {
