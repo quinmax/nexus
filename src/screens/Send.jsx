@@ -73,7 +73,7 @@ const Send = ({ navigation }) => {
                   <Text style={styles.columnSubHeader}>Send</Text>
                   <View style={styles.detailRow}>
                     <Text style={styles.detailLabel}>Qty:</Text>
-                    <View style={styles.quantityControls}> {/* Aligns controls to the right of label */}
+                    <View style={styles.quantityControls}>
                       <TouchableOpacity style={styles.quantityButton} onPress={() => console.log('Decrement quantity for ' + coin.name)}>
                         <Text style={styles.quantityButtonText}>-</Text>
                       </TouchableOpacity>

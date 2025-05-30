@@ -12,15 +12,15 @@ const { width } = Dimensions.get('window');
 
 const BottomNavBar = ({ navigation }) => {
   // Placeholder navigation functions. Replace with your actual navigation logic.
-  const navigateToHome = () => console.log('Navigate to Home'); // Example: navigation.navigate('Home');
-  const navigateToSearch = () => console.log('Navigate to Search'); // Example: navigation.navigate('Search');
-  const navigateToAddPost = () => console.log('Navigate to Add Post'); // Example: navigation.navigate('AddPost');
-  const navigateToNotifications = () => console.log('Navigate to Notifications'); // Example: navigation.navigate('Notifications');
-  const navigateToProfile = () => console.log('Navigate to Profile'); // Example: navigation.navigate('Profile');
+  const navigateToProfile = () => navigation.navigate('Profile');
+   const navigateToWallet = () => navigation.navigate('Wallet');
+  const navigateToHistory = () => console.log('Navigate to Add Post'); // Example: navigation.navigate('AddPost');
+  const navigateToExchange = () => console.log('Navigate to Notifications'); // Example: navigation.navigate('Notifications');
+  const navigateToHelp = () => console.log('Navigate to Profile'); // Example: navigation.navigate('Profile');
 
   return (
     <View style={styles.navBarContainer}>
-      <TouchableOpacity onPress={navigateToHome} style={styles.navItem}>
+      <TouchableOpacity onPress={navigateToProfile} style={styles.navItem}>
         <ProfileIcon
           width={styles.icon.width}
           height={styles.icon.height}
@@ -29,7 +29,7 @@ const BottomNavBar = ({ navigation }) => {
         <Text style={styles.navText}>Profile</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity onPress={navigateToSearch} style={styles.navItem}>
+      <TouchableOpacity onPress={navigateToWallet} style={styles.navItem}>
         <WalletIcon
           width={styles.icon.width}
           height={styles.icon.height}
@@ -38,7 +38,7 @@ const BottomNavBar = ({ navigation }) => {
         <Text style={styles.navText}>Wallet</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity onPress={navigateToAddPost} style={[styles.navItem, styles.centralNavItem]}>
+      <TouchableOpacity onPress={navigateToHistory} style={[styles.navItem, styles.centralNavItem]}>
         <HistoryIcon
           width={styles.centralIcon.width}
           height={styles.centralIcon.height}
@@ -47,7 +47,7 @@ const BottomNavBar = ({ navigation }) => {
         <Text style={styles.navText}>History</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity onPress={navigateToNotifications} style={styles.navItem}>
+      <TouchableOpacity onPress={navigateToExchange} style={styles.navItem}>
         <ExchangeIcon
           width={styles.icon.width}
           height={styles.icon.height}
@@ -56,7 +56,7 @@ const BottomNavBar = ({ navigation }) => {
         <Text style={styles.navText}>Exchange</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity onPress={navigateToProfile} style={styles.navItem}>
+      <TouchableOpacity onPress={navigateToHelp} style={styles.navItem}>
         <HelpIcon
           width={styles.icon.width}
           height={styles.icon.height}

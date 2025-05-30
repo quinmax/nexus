@@ -61,7 +61,7 @@ const Wallet = ({ navigation }) => {
 
         {/* Send Button Section */}
         <View style={styles.actionButtonContainer}>
-          <TouchableOpacity style={styles.sendButton} onPress={() => console.log('Send button pressed')}>
+          <TouchableOpacity style={styles.sendButton} onPress={() => navigation.navigate('Send')}>
             <Text style={styles.sendButtonText}>SEND</Text>
           </TouchableOpacity>
         </View>
