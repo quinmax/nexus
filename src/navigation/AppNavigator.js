@@ -9,6 +9,9 @@ import Wallet from '../screens/Wallet.jsx'; // Import the new Wallet screen
 import Send from '../screens/Send.jsx'; // Import the new Wallet screen
 import Confirm from '../screens/Confirm.jsx'; // Import the new Confirm screen
 import Sent from '../screens/Sent.jsx'; // Import the new Confirm screen
+import History from '../screens/History.jsx'; // Import the new Confirm screen
+import Exchange from '../screens/Exchange.jsx'; // Import the new Confirm screen
+import Help from '../screens/Help.jsx'; // Import the new Confirm screen
 
 const Stack = createStackNavigator();
 
@@ -23,6 +26,9 @@ function AppNavigator()
 			<Stack.Screen name="Send" component={Send} />
 			<Stack.Screen name="Confirm" component={Confirm} />
 			<Stack.Screen name="Sent" component={Sent} />
+			<Stack.Screen name="History" component={History} />
+			<Stack.Screen name="Exchange" component={Exchange} />
+			<Stack.Screen name="Help" component={Help} />
 		</Stack.Navigator>
 	);
 }

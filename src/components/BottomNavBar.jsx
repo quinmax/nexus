@@ -13,10 +13,12 @@ const { width } = Dimensions.get('window');
 const BottomNavBar = ({ navigation }) => {
   // Placeholder navigation functions. Replace with your actual navigation logic.
   const navigateToProfile = () => navigation.navigate('Profile');
-   const navigateToWallet = () => navigation.navigate('Wallet');
-  const navigateToHistory = () => console.log('Navigate to Add Post'); // Example: navigation.navigate('AddPost');
-  const navigateToExchange = () => console.log('Navigate to Notifications'); // Example: navigation.navigate('Notifications');
-  const navigateToHelp = () => console.log('Navigate to Profile'); // Example: navigation.navigate('Profile');
+  const navigateToWallet = () => navigation.navigate('Wallet');
+  const navigateToHistory = () => navigation.navigate('History');
+  const navigateToExchange = () => navigation.navigate('Exchange');
+  const navigateToHelp = () => navigation.navigate('Help');
+ 
+  //const navigateToHelp = () => console.log('Navigate to Profile'); // Example: navigation.navigate('Profile');
 
   return (
     <View style={styles.navBarContainer}>
