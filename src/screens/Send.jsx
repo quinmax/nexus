@@ -24,8 +24,8 @@ const Send = ({ navigation }) => {
       sendValueSelected: "R 0.00"
     },
   ];
-  const totalWallet = "4";
-  const totalSend = "R 42 457,75"; // Hardcoded as per reference
+  const totalQTY = "0";
+  const totalSend = "R 0,00"; // Hardcoded as per reference
 
   return (
     <View style={styles.safeArea}>
@@ -96,7 +96,7 @@ const Send = ({ navigation }) => {
           <View style={styles.totalsSection}>
             <View style={styles.totalRowItem}>
               <Text style={styles.totalLabel}>Total Send Quantity:</Text>
-              <Text style={styles.totalValueText}>{totalWallet}</Text>
+              <Text style={styles.totalValueText}>{totalQTY}</Text>
             </View>
             <View style={styles.totalRowItem}>
               <Text style={styles.totalLabel}>Total Send Value:</Text>
