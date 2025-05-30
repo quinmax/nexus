@@ -105,7 +105,7 @@ const Send = ({ navigation }) => {
           </View>
 
           {/* Send Button */}
-          <TouchableOpacity style={styles.sendActionButton} onPress={() => console.log('Send action pressed')}>
+          <TouchableOpacity style={styles.sendActionButton} onPress={() => navigation.navigate('Confirm')}>
             <Text style={styles.sendActionButtonText}>SEND</Text>
           </TouchableOpacity>
         </View>
@@ -286,7 +286,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 5, // Padding for the number itself
   },
   sendActionButton: {
-    backgroundColor: '#007AFF', // Prominent blue
+    backgroundColor: '#8e8e93', // Changed to grey
     paddingVertical: 16,
     paddingHorizontal: 20, // Internal padding
     borderRadius: 8,
