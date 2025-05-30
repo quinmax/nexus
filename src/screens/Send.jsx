@@ -9,8 +9,20 @@ import BottomNavBar from '../components/BottomNavBar.jsx';
 const Send = ({ navigation }) => {
   // Hardcoded data as per requirements
   const coins = [
-    { name: "Kingdom Coin #1", wallet: "2", sendValue: "R 22 457,75", currentQuantity: "0" },
-    { name: "Kingdom Coin #2", wallet: "2", sendValue: "R 22 457,75", currentQuantity: "0" },
+    {
+      name: "Kingdom Coin #1",
+      walletQuantity: "2",
+      walletValue: "R 22 457,75",
+      sendQuantitySelected: "0",
+      sendValueSelected: "R 0.00"
+    },
+    {
+      name: "Kingdom Coin #2",
+      walletQuantity: "2",
+      walletValue: "R 22 457,75",
+      sendQuantitySelected: "0",
+      sendValueSelected: "R 0.00"
+    },
   ];
   const totalWallet = "4";
   const totalSend = "R 42 457,75"; // Hardcoded as per reference
@@ -38,57 +50,57 @@ const Send = ({ navigation }) => {
             />
           </View>
 
-          {/* Coin Selection Table */}
-          <View style={styles.tableContainer}>
-            {/* Table Header */}
-            <View style={[styles.tableRowBase, styles.tableHeaderRow]}>
-              <View style={[styles.tableCellBase, styles.colFlexCoinName, styles.cellWithRightBorder]}>
-                {/* Empty header cell as per "Empty | Wallet | Send" */}
-                <Text style={[styles.headerText, styles.leftAlignedText]}></Text>
-              </View>
-              <View style={[styles.tableCellBase, styles.colFlexWallet, styles.cellWithRightBorder]}>
-                <Text style={[styles.headerText, styles.rightAlignedText]}>Wallet</Text>
-              </View>
-              <View style={[styles.tableCellBase, styles.colFlexSend]}>
-                <Text style={[styles.headerText, styles.rightAlignedText]}>Send</Text>
-              </View>
-            </View>
+          {/* Per-Coin Sections */}
+          {coins.map((coin, index) => (
+            <View key={`coin-section-${index}`} style={styles.coinSection}>
+              <Text style={styles.coinSectionHeader}>{coin.name}</Text>
+              <View style={styles.coinDetailsContainer}>
+                {/* Wallet Info Part for this coin */}
+                <View style={styles.coinInfoColumn}>
+                  <Text style={styles.columnSubHeader}>Wallet</Text>
+                  <View style={styles.detailRow}>
+                    <Text style={styles.detailLabel}>Qty:</Text>
+                    <Text style={styles.detailValue}>{coin.walletQuantity}</Text>
+                  </View>
+                  <View style={styles.detailRow}>
+                    <Text style={styles.detailLabel}>Value:</Text>
+                    <Text style={styles.detailValue}>{coin.walletValue}</Text>
+                  </View>
+                </View>
 
-            {/* Coin Data Rows */}
-            {coins.map((coin, index) => (
-              <View key={index} style={styles.tableRowBase}>
-                <View style={[styles.tableCellBase, styles.colFlexCoinName, styles.cellWithRightBorder]}>
-                  <Text style={[styles.cellText, styles.leftAlignedText]}>{coin.name}</Text>
-                </View>
-                <View style={[styles.tableCellBase, styles.colFlexWallet, styles.cellWithRightBorder]}>
-                  <Text style={[styles.cellText, styles.rightAlignedText]}>{coin.wallet}</Text>
-                </View>
-                <View style={[styles.tableCellBase, styles.colFlexSend]}>
-                  <Text style={[styles.sendValueText]}>{coin.sendValue}</Text>
-                  <View style={styles.quantitySelectorContainer}>
-                    <TouchableOpacity style={styles.quantityButton} onPress={() => console.log('Decrement quantity for ' + coin.name)}>
-                      <Text style={styles.quantityButtonText}>-</Text>
-                    </TouchableOpacity>
-                    <Text style={styles.quantityValueText}>{coin.currentQuantity}</Text>
-                    <TouchableOpacity style={styles.quantityButton} onPress={() => console.log('Increment quantity for ' + coin.name)}>
-                      <Text style={styles.quantityButtonText}>+</Text>
-                    </TouchableOpacity>
+                {/* Send Info Part for this coin */}
+                <View style={styles.coinInfoColumn}>
+                  <Text style={styles.columnSubHeader}>Send</Text>
+                  <View style={styles.detailRow}>
+                    <Text style={styles.detailLabel}>Qty:</Text>
+                    <View style={styles.quantityControls}> {/* Aligns controls to the right of label */}
+                      <TouchableOpacity style={styles.quantityButton} onPress={() => console.log('Decrement quantity for ' + coin.name)}>
+                        <Text style={styles.quantityButtonText}>-</Text>
+                      </TouchableOpacity>
+                      <Text style={styles.quantityValueText}>{coin.sendQuantitySelected}</Text>
+                      <TouchableOpacity style={styles.quantityButton} onPress={() => console.log('Increment quantity for ' + coin.name)}>
+                        <Text style={styles.quantityButtonText}>+</Text>
+                      </TouchableOpacity>
+                    </View>
+                  </View>
+                  <View style={styles.detailRow}>
+                    <Text style={styles.detailLabel}>Value:</Text>
+                    <Text style={styles.detailValue}>{coin.sendValueSelected}</Text>
                   </View>
                 </View>
               </View>
-            ))}
+            </View>
+          ))}
 
-            {/* Total Row */}
-            <View style={[styles.tableRowBase, styles.lastTableRow]}>
-              <View style={[styles.tableCellBase, styles.colFlexCoinName, styles.cellWithRightBorder]}>
-                <Text style={[styles.cellText, styles.totalRowText, styles.leftAlignedText]}>Total</Text>
-              </View>
-              <View style={[styles.tableCellBase, styles.colFlexWallet, styles.cellWithRightBorder]}>
-                <Text style={[styles.cellText, styles.totalRowText, styles.rightAlignedText]}>{totalWallet}</Text>
-              </View>
-              <View style={[styles.tableCellBase, styles.colFlexSend]}>
-                <Text style={[styles.cellText, styles.totalRowText, styles.rightAlignedText]}>{totalSend}</Text>
-              </View>
+          {/* Totals Section */}
+          <View style={styles.totalsSection}>
+            <View style={styles.totalRowItem}>
+              <Text style={styles.totalLabel}>Total Send Quantity:</Text>
+              <Text style={styles.totalValueText}>{totalWallet}</Text>
+            </View>
+            <View style={styles.totalRowItem}>
+              <Text style={styles.totalLabel}>Total Send Value:</Text>
+              <Text style={styles.totalValueText}>{totalSend}</Text>
             </View>
           </View>
 
@@ -160,79 +172,104 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#333333',
   },
-  tableContainer: {
+  // Styles for Per-Coin Sections
+  coinSection: {
     marginVertical: 25,
+    padding: 15,
     borderWidth: 1,
-    borderColor: '#555555', // Table outer border
+    borderColor: '#444444', // Border for the entire coin's block
     borderRadius: 8,
-    overflow: 'hidden', // Clip row borders to container radius
+    backgroundColor: '#101010', // Slightly different background for the block
   },
-  tableRowBase: {
-    flexDirection: 'row',
-    alignItems: 'center',
+  coinSectionHeader: {
+    color: '#FFFFFF',
+    fontSize: 16,
+    fontWeight: 'bold',
+    marginBottom: 15,
+    paddingBottom: 10,
     borderBottomWidth: 1,
-    borderBottomColor: '#333333', // Row separator
+    borderBottomColor: '#333333',
+    textAlign: 'center',
   },
-  tableHeaderRow: {
-    backgroundColor: '#101010', // Slightly different background for header
+  coinDetailsContainer: {
+    flexDirection: 'row', // Wallet and Send info side-by-side
+    justifyContent: 'space-between',
   },
-  lastTableRow: {
-    borderBottomWidth: 0, // No bottom border for the last row (Total row)
-  },
-  tableCellBase: {
-    paddingVertical: 12,
-    paddingHorizontal: 10,
-    justifyContent: 'center',
-  },
-  cellWithRightBorder: {
-    borderRightWidth: 1,
-    borderRightColor: '#333333', // Column separator
-  },
-  // Flex distribution for columns
-  colFlexCoinName: { // Used for empty header cell and coin name data cells
-    flex: 2.5,
-  },
-  colFlexWallet: {
+  coinInfoColumn: {
     flex: 1,
+    paddingHorizontal: 5, // Add some padding within each info column
   },
-  colFlexSend: {
-    flex: 2,
-  },
-  headerText: {
-    color: '#AEAEB2', // Light grey for header text
-    fontSize: 13,
+  columnSubHeader: {
+    color: '#AEAEB2',
+    fontSize: 14,
     fontWeight: '600',
+    marginBottom: 10,
+    textAlign: 'center',
   },
-  cellText: {
-    color: '#E0E0E0', // Light grey for data text
-    fontSize: 14,
+  detailRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 8, // Increased spacing for clarity
   },
-  rightAlignedText: {
+  detailLabel: {
+    color: '#AEAEB2',
+    fontSize: 13,
+    width: 55, // Ensures all labels take up the same space. Adjust if "Value:" needs more/less.
+  },
+  detailValue: {
+    flex: 1, // Ensure it takes available space to align with quantityControls
+    color: '#FFFFFF',
+    fontSize: 13,
     textAlign: 'right',
+    paddingRight: 5, // Match the 5px horizontal margin/padding of the rightmost button/text in quantityControls
+    height: 28, // Match the height of the quantityButton for consistent vertical alignment
+    lineHeight: 28, // Vertically center the text within the new height (for single line text)
   },
-  leftAlignedText: {
-    textAlign: 'left',
-  },
-  sendValueText: {
-    color: '#E0E0E0',
-    fontSize: 14,
-    textAlign: 'right',
-    marginBottom: 8, // Space between value and quantity selector
-  },
-  quantitySelectorContainer: {
+  quantityControls: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'flex-end', // Align selector to the right
+    justifyContent: 'flex-end', // Align to the right of the "Qty:" label
+    flex: 1, // Allow it to take remaining space in detailRow if needed
+  },
+  // Totals Section Styles
+  totalsSection: {
+    marginTop: 30,
+    paddingVertical: 15,
+    paddingHorizontal: 10,
+    borderTopWidth: 1,
+    borderTopColor: '#333333',
+    borderBottomWidth: 1,
+    borderBottomColor: '#333333',
+    backgroundColor: '#0A0A0A', // Slightly different background for totals
+  },
+  totalRowItem: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingVertical: 8,
+  },
+  totalLabel: {
+    color: '#AEAEB2',
+    fontSize: 14,
+    fontWeight: 'bold',
+  },
+  totalValueText: {
+    color: '#FFFFFF',
+    fontSize: 14,
+    fontWeight: 'bold',
+    textAlign: 'right',
   },
   quantityButton: {
-    width: 30,
-    height: 30,
-    borderRadius: 15, // Circular button
+    width: 28, // Slightly smaller for better fit
+    height: 28,
+    borderRadius: 14, // Circular button
     borderWidth: 1,
     borderColor: '#007AFF', // Blue outline
     justifyContent: 'center',
     alignItems: 'center',
-    marginHorizontal: 6, // Spacing around buttons
+    marginHorizontal: 5, // Adjusted spacing
+    backgroundColor: '#1c1c1e', // Button background
   },
   quantityButtonText: {
     color: '#007AFF',
@@ -245,11 +282,8 @@ const styles = StyleSheet.create({
     fontWeight: '500',
     minWidth: 20, // Ensure space for the number
     textAlign: 'center',
-  },
-  totalRowText: {
-    fontWeight: 'bold', // Bold for total values
-    fontSize: 15,
-    color: '#FFFFFF', // White text for totals
+    marginHorizontal: 5, // Spacing around the number
+    paddingHorizontal: 5, // Padding for the number itself
   },
   sendActionButton: {
     backgroundColor: '#007AFF', // Prominent blue
