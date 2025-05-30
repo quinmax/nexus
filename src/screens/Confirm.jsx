@@ -36,7 +36,7 @@ const Confirm = ({ navigation }) => {
     console.log('Confirm button pressed');
     console.log('OTP:', otp);
     // Potentially navigate to a success screen or back to wallet
-    // navigation.navigate('Wallet');
+    navigation.navigate('Sent'); // Navigate to Sent screen
   };
 
   return (
