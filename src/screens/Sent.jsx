@@ -2,9 +2,10 @@ import React from 'react';
 import { View, Text, Image, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
 
 // Import assets and components
-import NexusLogo from '../assets/nexus_logo.png';
 import WalletIcon from '../assets/WalletIcon.jsx'; // Make sure this path is correct
 import BottomNavBar from '../components/BottomNavBar.jsx'; // Make sure this path is correct
+import ScreenHeader from '../components/ScreenHeader.jsx'; // Import reusable header
+import { colors, typography, spacing, commonStyles } from '../theme/theme'; // Import theme
 
 const Sent = ({ navigation }) => {
   const handleBackToWallet = () => {
@@ -12,24 +13,18 @@ const Sent = ({ navigation }) => {
   };
 
   return (
-    <View style={styles.safeArea}>
+    <View style={commonStyles.safeArea}>
+      <ScreenHeader title="SENT" RightIconComponent={WalletIcon} />
       <ScrollView
         style={styles.scrollView}
         contentContainerStyle={styles.scrollContentContainer}
         keyboardShouldPersistTaps="handled"
       >
-        {/* Header Section: Logo, Title, Icon */}
-        <View style={styles.headerContainer}>
-          <Image source={NexusLogo} style={styles.logo} />
-          <Text style={styles.headerTitle}>SENT</Text>
-          <WalletIcon width={28} height={28} color="#FFFFFF" />
-        </View>
-
         {/* Main Content Area */}
         <View style={styles.contentBody}>
           <Text style={styles.successText}>Send transaction successful</Text>
           <TouchableOpacity onPress={handleBackToWallet} style={styles.backButton}>
-            <Text style={styles.backButtonText}>Back</Text>
+            <Text style={styles.backButtonText}>Back to Wallet</Text>
           </TouchableOpacity>
         </View>
       </ScrollView>
@@ -40,60 +35,37 @@ const Sent = ({ navigation }) => {
 
 const styles = StyleSheet.create({
   safeArea: {
-    flex: 1,
-    backgroundColor: '#000000', // Black background
+    // Now using commonStyles.safeArea
   },
   scrollView: {
     flex: 1,
   },
   scrollContentContainer: {
     flexGrow: 1, // Ensure content can fill space or scroll
-    paddingBottom: 80, // Space for BottomNavBar if content were to scroll past it
-  },
-  headerContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingHorizontal: 15,
-    paddingTop: 15, // Adjust for status bar if necessary
-    paddingBottom: 10,
-    borderBottomWidth: 1,
-    borderBottomColor: '#333333', // Consistent border color
-  },
-  logo: {
-    width: 30, // Small logo
-    height: 30,
-    resizeMode: 'contain',
-  },
-  headerTitle: {
-    color: '#FFFFFF',
-    fontSize: 20,
-    fontWeight: 'bold',
+    justifyContent: 'flex-start', // Align content to the top
+    paddingBottom: spacing.xl, // Add some padding at the bottom
   },
   contentBody: {
-    flex: 1, // Take remaining vertical space in ScrollView
-    justifyContent: 'center', // Center content vertically
+    // flex: 1, // No longer needed as scrollContentContainer handles flexGrow and centering
     alignItems: 'center', // Center content horizontally
-    paddingHorizontal: 20,
-    paddingBottom: 20, // Some padding at the bottom of this centered block
+    paddingHorizontal: spacing.containerPadding,
   },
   successText: {
-    color: '#FFFFFF', // White text
-    fontSize: 18,
-    fontWeight: '600', // Slightly bold
+    ...typography.h2, // Use a prominent typography style
+    color: colors.textPrimary,
     textAlign: 'center',
-    marginBottom: 30, // Space before the "Back" button
+    marginBottom: spacing.xl + spacing.l, // More space before the "Back" button
+    lineHeight: typography.h2.fontSize * 1.4, // Improve readability for multi-line text
   },
   backButton: {
-    // Add padding for a larger touch target if desired
-    paddingVertical: 10,
-    paddingHorizontal: 20,
+    alignSelf: 'center', // Ensure it's centered if contentBody alignItems changes
+    marginTop: spacing.l, // Keep some space if needed, but marginBottom on successText is primary
+    padding: spacing.s, // Add some padding for easier tapping
   },
   backButtonText: {
-    color: '#FFFFFF', // White text
-    fontSize: 16,
-    fontWeight: 'bold', // Make it look more like a button/link
-    // textDecorationLine: 'underline', // Optional: if you want an underline
+    ...typography.link,
+    color: colors.primary, // Use theme's primary color for links
+    textDecorationLine: 'underline',
   },
 });
 

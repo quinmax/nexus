@@ -103,6 +103,11 @@ const Confirm = ({ navigation }) => {
           <TouchableOpacity style={styles.confirmButton} onPress={handleConfirm}>
             <Text style={styles.confirmButtonText}>CONFIRM</Text>
           </TouchableOpacity>
+
+          {/* Cancel Link */}
+          <TouchableOpacity style={styles.cancelLinkContainer} onPress={() => navigation.navigate('Wallet')}>
+            <Text style={styles.cancelLinkText}>Cancel</Text>
+          </TouchableOpacity>
         </View>
       </ScrollView>
       <BottomNavBar navigation={navigation} />
@@ -204,15 +209,25 @@ const styles = StyleSheet.create({
     textAlign: 'right',
   },
   confirmButton: {
-    backgroundColor: colors.primaryButtonBackground, // Use themed button color
+    backgroundColor: '#1f2531', // Match other primary action buttons
     paddingVertical: spacing.m,
     borderRadius: borders.radiusMedium,
     alignItems: 'center',
-    marginTop: spacing.l,
+    marginTop: spacing.m, // Reduced space above the button
   },
   confirmButtonText: {
     ...typography.button,
     color: colors.primaryButtonText,
+  },
+  cancelLinkContainer: {
+    alignSelf: 'center',
+    marginTop: spacing.m, // Reduced space above the link
+    padding: spacing.s, // Add some padding for easier tapping
+  },
+  cancelLinkText: {
+    ...typography.link, // Uses colors.primary by default from theme
+    // color: colors.primary, // Explicitly ensuring it matches Login's "Forgot details" if needed
+    textDecorationLine: 'underline',
   },
 });
 

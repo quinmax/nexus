@@ -43,6 +43,11 @@ const FulldetailsScreen = ({ navigation }) => {
           <DetailItem label="Country" value={userDetails.country} />
           <DetailItem label="Address" value={userDetails.address} />
 
+          {/* SAVE Button */}
+          <TouchableOpacity style={styles.saveButton} onPress={() => console.log('Save button pressed')}>
+            <Text style={styles.saveButtonText}>SAVE</Text>
+          </TouchableOpacity>
+
           {/* Back to Profile Link */}
           <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backLinkContainer}>
             <Text style={styles.backLinkText}>Back to Profile</Text>
@@ -86,6 +91,18 @@ const styles = StyleSheet.create({
   detailValue: {
     ...typography.body,
     color: colors.inputText,
+  },
+  saveButton: {
+    backgroundColor: '#1f2531', // Match Login button color
+    paddingVertical: spacing.m,
+    borderRadius: borders.radiusMedium,
+    alignItems: 'center',
+    marginTop: spacing.xl, // Space above the save button
+    marginBottom: spacing.m, // Space below the save button, before "Back to Profile"
+  },
+  saveButtonText: {
+    ...typography.button,
+    color: colors.primaryButtonText,
   },
   backLinkContainer: {
     marginTop: spacing.xl,

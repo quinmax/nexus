@@ -15,6 +15,7 @@ import Help from '../screens/Help.jsx'; // Import the new Confirm screen
 import Fulldetails from '../screens/Fulldetails.jsx'; // Import the new Confirm screen
 import Reset from '../screens/Reset.jsx'; // Import the new Reset screen
 import Resetdone from '../screens/Resetdone.jsx'; // Import the new Resetdone screen
+import Registered from '../screens/Registered.jsx'; // Import the new Registered screen
 
 const Stack = createStackNavigator();
 
@@ -35,6 +36,7 @@ function AppNavigator()
 			<Stack.Screen name="Fulldetails" component={Fulldetails} />
 			<Stack.Screen name="Reset" component={Reset} />
 			<Stack.Screen name="Resetdone" component={Resetdone} />
+			<Stack.Screen name="Registered" component={Registered} />
 		</Stack.Navigator>
 	);
 }

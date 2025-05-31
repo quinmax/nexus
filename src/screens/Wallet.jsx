@@ -2,17 +2,18 @@ import React from 'react';
 import { View, Text, Image, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
 
 // Import assets and components
-import NexusLogo from '../assets/nexus_logo.png';
 import WalletIcon from '../assets/WalletIcon.jsx';
 import KingdomCoinImage from '../assets/KingdomCoin.jpg'; // Assuming this is the path
 import BottomNavBar from '../components/BottomNavBar.jsx';
+import ScreenHeader from '../components/ScreenHeader.jsx'; // Import reusable header
+import { colors, typography, spacing, borders, commonStyles } from '../theme/theme'; // Import theme
 
 const CoinCard = ({ title, qtyInWallet, imageSrc, details, onViewFullDetailsPress }) => {
   return (
     <View style={styles.cardContainer}>
       <View style={styles.cardHeader}>
         <Text style={styles.cardTitle}>{title}</Text>
-        <Text style={styles.cardQtyTag}>{qtyInWallet}</Text>
+        <Text style={styles.cardQtyTag}>QTY: {qtyInWallet}</Text>
       </View>
       <Image source={imageSrc} style={styles.coinImage} />
       <View style={styles.detailsListContainer}>
@@ -44,21 +45,14 @@ const Wallet = ({ navigation }) => {
   };
 
   return (
-    <View style={styles.safeArea}>
+    <View style={commonStyles.safeArea}>
+      <ScreenHeader title="WALLET" RightIconComponent={WalletIcon} />
       <ScrollView style={styles.scrollView} contentContainerStyle={styles.scrollContentContainer}>
-        {/* Header Section */}
-        <View style={styles.headerContainer}>
-          <Image source={NexusLogo} style={styles.logo} />
-          <Text style={styles.headerTitle}>WALLET</Text>
-          <WalletIcon width={28} height={28} color="#FFFFFF" />
-        </View>
-
         {/* Wallet Total Balance Section */}
         <View style={styles.balanceSectionContainer}>
           <Text style={styles.balanceLabel}>Wallet total balance</Text>
           <Text style={styles.balanceAmount}>{walletTotalBalance}</Text>
         </View>
-
         {/* Send Button Section */}
         <View style={styles.actionButtonContainer}>
           <TouchableOpacity style={styles.sendButton} onPress={() => navigation.navigate('Send')}>
@@ -70,14 +64,14 @@ const Wallet = ({ navigation }) => {
         <View style={styles.mainContentContainer}>
           <CoinCard
             title="Kingdom Coin #1"
-            qtyInWallet="OTY in wallet"
+            qtyInWallet="1" // Example QTY
             imageSrc={KingdomCoinImage}
             details={coin1Details}
             onViewFullDetailsPress={() => handleViewCoinDetails("Kingdom Coin #1")}
           />
           <CoinCard
             title="Kingdom Coin #2" // Assuming a second, similar coin
-            qtyInWallet="OTY in wallet"
+            qtyInWallet="2" // Example QTY
             imageSrc={KingdomCoinImage} // Replace if different image
             details={coin1Details} // Replace if different details
             onViewFullDetailsPress={() => handleViewCoinDetails("Kingdom Coin #2")}
@@ -92,120 +86,99 @@ const Wallet = ({ navigation }) => {
 };
 
 const styles = StyleSheet.create({
-  safeArea: {
-    flex: 1,
-    backgroundColor: '#000000',
-  },
+  // safeArea is now commonStyles.safeArea
   scrollView: {
     flex: 1,
   },
   scrollContentContainer: {
-    paddingBottom: 80, // To ensure content is not hidden behind the absolute positioned BottomNavBar
-  },
-  headerContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingHorizontal: 15,
-    paddingTop: 15,
-    paddingBottom: 10,
-    borderBottomWidth: 1,
-    borderBottomColor: '#333333',
-  },
-  logo: {
-    width: 30,
-    height: 30,
-    resizeMode: 'contain',
-  },
-  headerTitle: {
-    color: '#FFFFFF',
-    fontSize: 20,
-    fontWeight: 'bold',
+    paddingBottom: spacing.xl + spacing.xl, // Ensure space for BottomNavBar
   },
   balanceSectionContainer: {
-    paddingHorizontal: 20,
-    paddingTop: 25,
-    paddingBottom: 5, // Further reduced bottom padding to decrease space above the send button
-    alignItems: 'flex-start',
+    paddingHorizontal: spacing.containerPadding,
+    paddingTop: spacing.l,
+    paddingBottom: spacing.s,
+    alignItems: 'center', // Center balance info like Profile screen's top section
+    backgroundColor: colors.surface, // Card-like background for balance
+    borderRadius: borders.radiusMedium,
+    marginHorizontal: spacing.containerPadding, // Add horizontal margin
+    marginTop: spacing.l, // Add top margin
   },
   balanceLabel: {
-    color: '#FFFFFF',
-    fontSize: 18,
-    marginBottom: 8,
+    ...typography.body,
+    color: colors.textSecondary,
+    marginBottom: spacing.s,
   },
   balanceAmount: {
-    color: '#007AFF',
-    fontSize: 28,
-    fontWeight: 'bold',
+    ...typography.h1, // Or h2, consistent with Profile
+    color: colors.textPrimary, // Consistent with Profile balance color
   },
   mainContentContainer: {
-    paddingHorizontal: 20,
-    paddingVertical: 10,
+    paddingHorizontal: spacing.containerPadding,
+    paddingVertical: spacing.m,
   },
   actionButtonContainer: {
-    paddingHorizontal: 20,
-    paddingVertical: 5, // Further reduce vertical spacing for this container
-    alignItems: 'stretch', // Make button take full width if desired, or 'center'
+    paddingHorizontal: spacing.containerPadding,
+    paddingVertical: spacing.m,
+    marginTop: spacing.m, // Add some space after balance
   },
   sendButton: {
-    backgroundColor: '#8e8e93', // Grey color
-    paddingVertical: 15,
-    paddingHorizontal: 20,
-    borderRadius: 8,
+    backgroundColor: '#1f2531', // Match Login button color
+    paddingVertical: spacing.m,
+    borderRadius: borders.radiusMedium,
     alignItems: 'center', // Center text horizontally
   },
   sendButtonText: {
-    color: '#FFFFFF', // White text
-    fontSize: 16,
-    fontWeight: 'bold',
+    ...typography.button,
+    color: colors.primaryButtonText,
   },
   // Coin Card Styles
   cardContainer: {
-    backgroundColor: '#1c1c1e', // Dark grey, similar to nav bar
-    borderRadius: 10,
-    padding: 15,
-    marginBottom: 20,
+    backgroundColor: colors.surface, // Use theme surface color
+    borderRadius: borders.radiusMedium,
+    padding: spacing.m,
+    marginBottom: spacing.l,
   },
   cardHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 10,
+    marginBottom: spacing.m,
   },
   cardTitle: {
-    color: '#FFFFFF',
-    fontSize: 18,
-    fontWeight: 'bold',
+    ...typography.h2, // Or a slightly smaller header style if preferred
+    fontSize: typography.headerTitle.fontSize, // Match header title size
+    color: colors.textPrimary,
   },
   cardQtyTag: {
-    color: '#8e8e93', // Subtle grey
-    fontSize: 12,
-    backgroundColor: '#333333',
-    paddingHorizontal: 8,
-    paddingVertical: 3,
-    borderRadius: 5,
+    ...typography.caption,
+    color: colors.textSecondary,
+    backgroundColor: colors.inputBackground, // Slightly different background for tag
+    paddingHorizontal: spacing.s,
+    paddingVertical: spacing.xs,
+    borderRadius: borders.radiusSmall,
   },
   coinImage: {
     width: '100%',
     height: 150, // Adjust as needed
-    borderRadius: 8,
-    marginBottom: 15,
-    resizeMode: 'cover', // Or 'contain' depending on image aspect ratio
+    borderRadius: borders.radiusSmall, // Consistent border radius
+    marginBottom: spacing.m,
+    resizeMode: 'contain', // Changed to show the complete picture
   },
   detailsListContainer: {
-    marginBottom: 15,
+    marginBottom: spacing.m,
   },
   detailItemText: {
-    color: '#E0E0E0', // Light grey for details
-    fontSize: 14,
-    marginBottom: 8,
+    ...typography.body,
+    color: colors.textSecondary, // Softer color for details
+    fontSize: typography.label.fontSize, // Match label font size
+    marginBottom: spacing.s,
   },
   viewDetailsButton: {
     alignSelf: 'flex-start', // Align link to the left
   },
   viewDetailsLink: {
-    color: '#00AFFF', // A slightly different blue for links within cards
-    fontSize: 14,
+    ...typography.link, // Use themed link style
+    color: colors.primary, // Use theme primary color for links
     textDecorationLine: 'underline',
   },
 });

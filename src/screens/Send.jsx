@@ -2,9 +2,10 @@ import React from 'react';
 import { View, Text, Image, StyleSheet, TouchableOpacity, ScrollView, TextInput } from 'react-native';
 
 // Import assets and components
-import NexusLogo from '../assets/nexus_logo.png';
 import WalletIcon from '../assets/WalletIcon.jsx';
 import BottomNavBar from '../components/BottomNavBar.jsx';
+import ScreenHeader from '../components/ScreenHeader.jsx'; // Import reusable header
+import { colors, typography, spacing, borders, commonStyles } from '../theme/theme'; // Import theme
 
 const Send = ({ navigation }) => {
   // Hardcoded data as per requirements
@@ -28,14 +29,9 @@ const Send = ({ navigation }) => {
   const totalSend = "R 0,00"; // Hardcoded as per reference
 
   return (
-    <View style={styles.safeArea}>
+    <View style={commonStyles.safeArea}>
+      <ScreenHeader title="SEND" RightIconComponent={WalletIcon} />
       <ScrollView style={styles.scrollView} contentContainerStyle={styles.scrollContentContainer}>
-        {/* Header Section: Logo, Title, Icon */}
-        <View style={styles.headerContainer}>
-          <Image source={NexusLogo} style={styles.logo} />
-          <Text style={styles.headerTitle}>SEND</Text>
-          <WalletIcon width={28} height={28} color="#FFFFFF" />
-        </View>
 
         {/* Main Content Area */}
         <View style={styles.mainContentContainer}>
@@ -45,7 +41,7 @@ const Send = ({ navigation }) => {
             <TextInput
               style={styles.accountNumberInput}
               placeholder="Enter receiving account number here"
-              placeholderTextColor="#8e8e93"
+              placeholderTextColor={colors.textPlaceholder}
               keyboardType="numeric" // Assuming account numbers are numeric
             />
           </View>
@@ -108,6 +104,11 @@ const Send = ({ navigation }) => {
           <TouchableOpacity style={styles.sendActionButton} onPress={() => navigation.navigate('Confirm')}>
             <Text style={styles.sendActionButtonText}>SEND</Text>
           </TouchableOpacity>
+
+          {/* Back to Wallet Link */}
+          <TouchableOpacity style={styles.backLinkContainer} onPress={() => navigation.navigate('Wallet')}>
+            <Text style={styles.backLinkText}>Back to Wallet</Text>
+          </TouchableOpacity>
         </View>
       </ScrollView>
       <BottomNavBar navigation={navigation} />
@@ -116,115 +117,93 @@ const Send = ({ navigation }) => {
 };
 
 const styles = StyleSheet.create({
-  safeArea: {
-    flex: 1,
-    backgroundColor: '#000000',
-  },
+  // safeArea is now commonStyles.safeArea
   scrollView: {
     flex: 1,
   },
   scrollContentContainer: {
-    paddingBottom: 100, // Space for Send button and BottomNavBar
-  },
-  headerContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingHorizontal: 15,
-    paddingTop: 15, // Adjust if not using SafeAreaView or for status bar height
-    paddingBottom: 10,
-    borderBottomWidth: 1,
-    borderBottomColor: '#333333',
-  },
-  logo: {
-    width: 30,
-    height: 30,
-    resizeMode: 'contain',
-  },
-  headerTitle: {
-    color: '#FFFFFF',
-    fontSize: 20,
-    fontWeight: 'bold',
+    paddingBottom: spacing.xl + spacing.xl, // Ensure space for BottomNavBar
   },
   mainContentContainer: {
-    paddingHorizontal: 20,
-    paddingVertical: 20,
+    paddingHorizontal: spacing.containerPadding,
+    paddingVertical: spacing.l,
   },
   sendToAccountSection: {
     alignItems: 'center', // Centers the title "Send to Account number"
-    marginVertical: 20,
+    marginBottom: spacing.xl,
   },
   sendToAccountTitle: {
-    color: '#FFFFFF',
-    fontSize: 18, // As per "Clean minimal design with appropriate font sizes"
-    fontWeight: '600',
-    marginBottom: 15,
+    ...typography.h2,
+    fontSize: typography.headerTitle.fontSize, // Match header title size
+    color: colors.textPrimary,
+    marginBottom: spacing.m,
   },
   accountNumberInput: {
-    backgroundColor: '#1c1c1e', // Dark input field
-    color: '#FFFFFF',
-    paddingHorizontal: 20,
-    paddingVertical: 15,
-    borderRadius: 8,
+    backgroundColor: colors.inputBackground,
+    color: colors.inputText,
+    paddingHorizontal: spacing.inputPaddingHorizontal,
+    paddingVertical: spacing.inputPaddingVertical,
+    borderRadius: borders.radiusMedium,
     width: '100%', // Full width within padded container
-    fontSize: 16,
+    fontSize: typography.body.fontSize,
     textAlign: 'left', // Standard for input fields
-    borderWidth: 1,
-    borderColor: '#333333',
+    borderWidth: borders.borderWidth,
+    borderColor: colors.inputBorder,
   },
   // Styles for Per-Coin Sections
   coinSection: {
-    marginVertical: 25,
-    padding: 15,
-    borderWidth: 1,
-    borderColor: '#444444', // Border for the entire coin's block
-    borderRadius: 8,
-    backgroundColor: '#101010', // Slightly different background for the block
+    marginBottom: spacing.xl,
+    padding: spacing.m,
+    borderWidth: borders.borderWidth,
+    borderColor: colors.border,
+    borderRadius: borders.radiusMedium,
+    backgroundColor: colors.surface,
   },
   coinSectionHeader: {
-    color: '#FFFFFF',
-    fontSize: 16,
-    fontWeight: 'bold',
-    marginBottom: 15,
-    paddingBottom: 10,
-    borderBottomWidth: 1,
-    borderBottomColor: '#333333',
+    ...typography.h2,
+    fontSize: typography.headerTitle.fontSize - 2, // Slightly smaller than main headers
+    color: colors.textPrimary,
+    marginBottom: spacing.m,
+    paddingBottom: spacing.s,
+    borderBottomWidth: borders.borderWidth,
+    borderBottomColor: colors.border,
     textAlign: 'center',
   },
   coinDetailsContainer: {
     flexDirection: 'row', // Wallet and Send info side-by-side
     justifyContent: 'space-between',
+    marginTop: spacing.m,
   },
   coinInfoColumn: {
     flex: 1,
-    paddingHorizontal: 5, // Add some padding within each info column
+    paddingHorizontal: spacing.xs,
   },
   columnSubHeader: {
-    color: '#AEAEB2',
-    fontSize: 14,
-    fontWeight: '600',
-    marginBottom: 10,
+    ...typography.label,
+    color: colors.textSecondary,
+    fontSize: typography.label.fontSize + 1, // Slightly larger label
+    marginBottom: spacing.m,
     textAlign: 'center',
   },
   detailRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 8, // Increased spacing for clarity
+    marginBottom: spacing.s,
   },
   detailLabel: {
-    color: '#AEAEB2',
-    fontSize: 13,
-    width: 55, // Ensures all labels take up the same space. Adjust if "Value:" needs more/less.
+    ...typography.caption,
+    color: colors.textSecondary,
+    width: 60, // Adjusted width
   },
   detailValue: {
     flex: 1, // Ensure it takes available space to align with quantityControls
-    color: '#FFFFFF',
-    fontSize: 13,
+    ...typography.caption,
+    color: colors.textPrimary,
     textAlign: 'right',
-    paddingRight: 5, // Match the 5px horizontal margin/padding of the rightmost button/text in quantityControls
-    height: 28, // Match the height of the quantityButton for consistent vertical alignment
-    lineHeight: 28, // Vertically center the text within the new height (for single line text)
+    paddingRight: spacing.xs,
+    height: 30, // Match the height of the quantityButton
+    lineHeight: 30,
   },
   quantityControls: {
     flexDirection: 'row',
@@ -232,74 +211,78 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end', // Align to the right of the "Qty:" label
     flex: 1, // Allow it to take remaining space in detailRow if needed
   },
+  quantityButton: {
+    width: 30, // Standardized size
+    height: 30,
+    borderRadius: borders.radiusMedium, // Consistent radius
+    borderWidth: borders.borderWidth,
+    borderColor: colors.primary, // Use theme primary for outline
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginHorizontal: spacing.xs,
+    backgroundColor: colors.inputBackground, // Subtle background
+  },
+  quantityButtonText: {
+    color: colors.primary, // Use theme primary for text
+    fontSize: typography.h2.fontSize, // Larger, clearer text
+    fontWeight: 'bold',
+    lineHeight: typography.h2.fontSize + 2, // Adjust for vertical centering
+  },
+  quantityValueText: {
+    ...typography.body,
+    color: colors.textPrimary,
+    minWidth: 25, // Ensure space for the number
+    textAlign: 'center',
+    marginHorizontal: spacing.xs,
+  },
   // Totals Section Styles
   totalsSection: {
-    marginTop: 30,
-    paddingVertical: 15,
-    paddingHorizontal: 10,
-    borderTopWidth: 1,
-    borderTopColor: '#333333',
-    borderBottomWidth: 1,
-    borderBottomColor: '#333333',
-    backgroundColor: '#0A0A0A', // Slightly different background for totals
+    marginTop: spacing.xl,
+    paddingVertical: spacing.m,
+    paddingHorizontal: spacing.m,
+    borderTopWidth: borders.borderWidth,
+    borderTopColor: colors.border,
+    borderBottomWidth: borders.borderWidth,
+    borderBottomColor: colors.border,
+    backgroundColor: colors.surface, // Consistent surface color
   },
   totalRowItem: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingVertical: 8,
+    paddingVertical: spacing.s,
   },
   totalLabel: {
-    color: '#AEAEB2',
-    fontSize: 14,
-    fontWeight: 'bold',
+    ...typography.label,
+    color: colors.textSecondary,
+    fontWeight: typography.button.fontWeight, // Match button weight
   },
   totalValueText: {
-    color: '#FFFFFF',
-    fontSize: 14,
-    fontWeight: 'bold',
+    ...typography.body,
+    color: colors.textPrimary,
+    fontWeight: typography.button.fontWeight, // Match button weight
     textAlign: 'right',
   },
-  quantityButton: {
-    width: 28, // Slightly smaller for better fit
-    height: 28,
-    borderRadius: 14, // Circular button
-    borderWidth: 1,
-    borderColor: '#007AFF', // Blue outline
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginHorizontal: 5, // Adjusted spacing
-    backgroundColor: '#1c1c1e', // Button background
-  },
-  quantityButtonText: {
-    color: '#007AFF',
-    fontSize: 18,
-    fontWeight: 'bold',
-  },
-  quantityValueText: {
-    color: '#FFFFFF',
-    fontSize: 16,
-    fontWeight: '500',
-    minWidth: 20, // Ensure space for the number
-    textAlign: 'center',
-    marginHorizontal: 5, // Spacing around the number
-    paddingHorizontal: 5, // Padding for the number itself
-  },
   sendActionButton: {
-    backgroundColor: '#8e8e93', // Changed to grey
-    paddingVertical: 16,
-    paddingHorizontal: 20, // Internal padding
-    borderRadius: 8,
+    backgroundColor: '#1f2531', // Match Wallet.jsx SEND button color
+    paddingVertical: spacing.m,
+    borderRadius: borders.radiusMedium,
     alignItems: 'center', // Center text inside button
-    marginTop: 30, // Space above the button
-    // This button will stretch if its parent has alignItems: 'stretch'
-    // or it will be as wide as its content + padding.
-    // For full-width similar to input, ensure parent container allows it.
+    marginTop: spacing.xl, // Space above the button
   },
   sendActionButtonText: {
-    color: '#FFFFFF',
-    fontSize: 18,
-    fontWeight: 'bold',
+    ...typography.button,
+    color: colors.primaryButtonText,
+  },
+  backLinkContainer: {
+    alignSelf: 'center',
+    marginTop: spacing.l, // Add space above the link
+    padding: spacing.s, // Add some padding for easier tapping
+  },
+  backLinkText: {
+    ...typography.link, // Uses colors.primary by default from theme
+    color: colors.primary, // Explicitly ensuring it matches Login's "Forgot details"
+    textDecorationLine: 'underline',
   },
 });
 

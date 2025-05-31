@@ -72,7 +72,7 @@ const ProfileScreen = ({ navigation }) => {
           </View>
 
           {/* View/Edit Details Link - MOVED HERE */}
-          <TouchableOpacity onPress={() => console.log('Navigate to full account details')}>
+          <TouchableOpacity onPress={() => navigation.navigate('Fulldetails')}>
             <Text style={styles.editDetailsLink}>View/Edit full account details</Text>
           </TouchableOpacity>
 
@@ -124,7 +124,7 @@ const styles = StyleSheet.create({
   },
   editDetailsLink: {
     ...typography.link,
-    color: '#4c4d4d', // Updated text color
+    color: colors.primary, // Changed to use theme's primary color
     textAlign: 'center',
     paddingHorizontal: spacing.containerPadding,
     marginBottom: spacing.m, // Adjusted for the logout link below
@@ -132,7 +132,7 @@ const styles = StyleSheet.create({
   },
   logoutLink: {
     ...typography.link,
-    color: '#4c4d4d', // Updated text color
+    color: colors.primary, // Changed to use theme's primary color
     textAlign: 'center',
     paddingHorizontal: spacing.containerPadding,
     marginBottom: spacing.l, // Space before the details section

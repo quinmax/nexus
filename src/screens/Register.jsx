@@ -76,7 +76,12 @@ const Register = ({ navigation }) => {
       </View>
 
       {/* Buttons */}
-      <TouchableOpacity style={styles.registerButton}>
+      <TouchableOpacity 
+        style={styles.registerButton} 
+        onPress={() => {
+          // Add actual registration logic here
+      navigation.navigate('Registered'); // Navigate after successful registration
+        }}>
         <Text style={styles.registerButtonText}>REGISTER</Text>
       </TouchableOpacity>
       
