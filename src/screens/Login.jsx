@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, Image, StyleSheet, ScrollView } from 'react-native';
+import { colors, typography, spacing, borders, commonStyles } from '../theme/theme';
 
 const Login = ({ navigation }) => {
   const [email, setEmail] = useState('');
@@ -11,7 +12,7 @@ const Login = ({ navigation }) => {
   };
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
+    <ScrollView contentContainerStyle={styles.scrollContainer} keyboardShouldPersistTaps="handled">
       {/* Logo */}
       <Image
         source={require('../assets/nexus_logo.png')} // Update with your logo path
@@ -20,13 +21,13 @@ const Login = ({ navigation }) => {
       />
 
       {/* Welcome Text */}
-      <Text style={styles.welcomeText}>Welcome to Nexus</Text>
+      <Text style={styles.welcomeText}>Welcome to Nexus Wallet</Text>
 
       {/* Email Input */}
       <TextInput
         style={styles.input}
-        placeholder="Email Address"
-        placeholderTextColor="#666"
+        placeholder="Email Address" // Consider "Email" for brevity
+        placeholderTextColor={colors.textPlaceholder}
         keyboardType="email-address"
         autoCapitalize="none"
         value={email}
@@ -36,8 +37,8 @@ const Login = ({ navigation }) => {
       {/* Password Input */}
       <TextInput
         style={styles.input}
-        placeholder="Password"
-        placeholderTextColor="#666"
+        placeholder="Password" // Consistent placeholder color
+        placeholderTextColor={colors.textPlaceholder}
         secureTextEntry
         value={password}
         onChangeText={setPassword}
@@ -45,7 +46,7 @@ const Login = ({ navigation }) => {
 
       {/* Login Button */}
       <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
-        <Text style={styles.buttonText}>LOGIN</Text>
+        <Text style={styles.loginButtonText}>LOGIN</Text>
       </TouchableOpacity>
 
       {/* Links Container */}
@@ -63,58 +64,58 @@ const Login = ({ navigation }) => {
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#000',
+  // safeArea: { ...commonStyles.safeArea }, // If using SafeAreaView as root
+  scrollContainer: { // Changed from 'container' to be more specific
+    flexGrow: 1, // Use flexGrow for ScrollView content
+    backgroundColor: colors.background,
     alignItems: 'center',
     justifyContent: 'center',
-    padding: 20,
+    padding: spacing.containerPadding,
   },
   logo: {
-    width: 150,
-    height: 150,
-    marginBottom: 30,
+    width: 220, // Increased width
+    height: 220, // Increased height
+    marginBottom: spacing.xl,
   },
   welcomeText: {
-    color: '#fff',
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 40,
+    ...typography.h2, // Use themed typography
+    color: colors.textPrimary,
+    marginBottom: spacing.xl + spacing.s, // 40
   },
   input: {
     width: '100%',
     height: 50,
-    backgroundColor: '#fff',
-    borderRadius: 8,
-    paddingHorizontal: 15,
-    marginBottom: 20,
-    fontSize: 16,
-    borderWidth: 1,
-    borderColor: '#ddd',
+    backgroundColor: colors.inputBackground, // Themed input
+    color: colors.inputText,
+    borderRadius: borders.radiusMedium,
+    paddingHorizontal: spacing.inputPaddingHorizontal,
+    marginBottom: spacing.l, // 20-24
+    fontSize: typography.body.fontSize,
+    borderWidth: borders.borderWidth,
+    borderColor: colors.inputBorder, // Themed border
   },
   loginButton: {
     width: '100%',
     height: 50,
-    backgroundColor: '#007bff',
-    borderRadius: 8,
+    backgroundColor: '#1f2531', // Updated color for the LOGIN button
+    borderRadius: borders.radiusMedium,
     alignItems: 'center',
     justifyContent: 'center',
-    marginTop: 20,
+    marginTop: spacing.l, // 20-24
   },
-  buttonText: {
-    color: '#fff',
-    fontSize: 18,
-    fontWeight: 'bold',
+  loginButtonText: { // Renamed from buttonText
+    ...typography.button,
+    color: colors.primaryButtonText,
   },
   linksContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     width: '100%',
-    marginTop: 30,
+    marginTop: spacing.xl, // 30-32
   },
   linkText: {
-    color: '#007bff',
-    fontSize: 16,
+    ...typography.link, // Use themed link style
+    color: '#4c4d4d', // Updated text color for Register and Forgot details links
   },
 });
 

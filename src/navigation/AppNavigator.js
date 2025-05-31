@@ -18,7 +18,7 @@ const Stack = createStackNavigator();
 function AppNavigator() 
 {
 	return (
-		<Stack.Navigator initialRouteName="Profile" screenOptions={{ headerShown: false, animationEnabled: false }}>
+		<Stack.Navigator initialRouteName="Login" screenOptions={{ headerShown: false, animationEnabled: false }}>
 			<Stack.Screen name="Login" component={Login} />
 			<Stack.Screen name="Register" component={Register} />
 			<Stack.Screen name="Wallet" component={Wallet} />

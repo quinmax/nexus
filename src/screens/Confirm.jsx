@@ -3,8 +3,10 @@ import { View, Text, Image, StyleSheet, TouchableOpacity, ScrollView, TextInput 
 
 // Import assets and components
 import NexusLogo from '../assets/nexus_logo.png';
-import WalletIcon from '../assets/WalletIcon.jsx';
+import WalletIcon from '../assets/WalletIcon.jsx'; // Keep this if it's specific
+import ScreenHeader from '../components/ScreenHeader.jsx'; // Import new header
 import BottomNavBar from '../components/BottomNavBar.jsx';
+import { colors, typography, spacing, borders, commonStyles } from '../theme/theme';
 
 const Confirm = ({ navigation }) => {
   // Hardcoded data for display
@@ -41,17 +43,12 @@ const Confirm = ({ navigation }) => {
 
   return (
     <View style={styles.safeArea}>
+      <ScreenHeader title="CONFIRM" RightIconComponent={WalletIcon} />
       <ScrollView style={styles.scrollView} contentContainerStyle={styles.scrollContentContainer}>
-        {/* Header Section: Logo, Title, Icon */}
-        <View style={styles.headerContainer}>
-          <Image source={NexusLogo} style={styles.logo} />
-          <Text style={styles.headerTitle}>CONFIRM</Text>
-          <WalletIcon width={28} height={28} color="#FFFFFF" />
-        </View>
-
         {/* Main Content Area */}
         <View style={styles.mainContentContainer}>
           <Text style={styles.infoHeading}>You are about to send the below coins to</Text>
+
 
           {/* Account Details Section */}
           <View style={styles.accountDetailSection}>
@@ -78,7 +75,7 @@ const Confirm = ({ navigation }) => {
             <TextInput
               style={[styles.inputBox, styles.otpInputBox]}
               placeholder="Input OTP here"
-              placeholderTextColor="#8e8e93"
+              placeholderTextColor={colors.textPlaceholder}
               keyboardType="numeric"
               value={otp}
               onChangeText={setOtp}
@@ -114,101 +111,75 @@ const Confirm = ({ navigation }) => {
 };
 
 const styles = StyleSheet.create({
-  safeArea: {
-    flex: 1,
-    backgroundColor: '#000000',
-  },
+  safeArea: { ...commonStyles.safeArea },
   scrollView: {
     flex: 1,
   },
   scrollContentContainer: {
-    paddingBottom: 100, // Space for Confirm button and BottomNavBar
-  },
-  headerContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingHorizontal: 15,
-    paddingTop: 15,
-    paddingBottom: 10,
-    borderBottomWidth: 1,
-    borderBottomColor: '#333333',
-  },
-  logo: {
-    width: 30,
-    height: 30,
-    resizeMode: 'contain',
-  },
-  headerTitle: {
-    color: '#FFFFFF',
-    fontSize: 20,
-    fontWeight: 'bold',
+    paddingBottom: 100,
   },
   mainContentContainer: {
-    paddingHorizontal: 20,
-    paddingVertical: 20,
+    paddingHorizontal: spacing.containerPadding,
+    paddingVertical: spacing.containerPadding,
   },
   infoHeading: {
-    color: '#FFFFFF',
-    fontSize: 16,
+    ...typography.body,
     fontWeight: '600',
     textAlign: 'center',
-    marginBottom: 20,
+    marginBottom: spacing.l,
   },
   accountDetailSection: {
-    marginBottom: 20,
+    marginBottom: spacing.l,
   },
   otpSection: {
-    marginBottom: 25,
+    marginBottom: spacing.l,
   },
   detailLabel: {
-    color: '#FFFFFF',
-    fontSize: 14,
-    fontWeight: '500',
-    marginBottom: 8,
+    ...typography.label,
+    marginBottom: spacing.s,
   },
   inputBox: {
-    paddingHorizontal: 15,
-    paddingVertical: 12,
-    borderRadius: 8,
-    fontSize: 16,
-    borderWidth: 1,
+    paddingHorizontal: spacing.inputPaddingHorizontal,
+    paddingVertical: spacing.inputPaddingVertical,
+    borderRadius: borders.radiusMedium,
+    fontSize: typography.body.fontSize,
+    borderWidth: borders.borderWidth,
   },
   displayInputBox: {
-    backgroundColor: '#1c1c1e', // Grey input box
-    color: '#FFFFFF', // White text
-    borderColor: '#333333',
+    backgroundColor: colors.inputBackground,
+    color: colors.inputText,
+    borderColor: colors.inputBorder,
   },
   otpInputBox: {
-    backgroundColor: '#FFFFFF', // White input box
-    color: '#000000', // Black text for input
-    borderColor: '#8e8e93',
+    backgroundColor: colors.inputBackground, // Changed from white to dark
+    color: colors.inputText,         // Changed from black to white
+    borderColor: colors.primary, // Highlight OTP input with primary color or keep inputBorder
   },
   coinCardSection: {
-    backgroundColor: '#101010', // Darker card background
-    borderRadius: 8,
-    padding: 15,
-    marginBottom: 30,
-    borderWidth: 1,
-    borderColor: '#444444',
+    backgroundColor: colors.surface,
+    borderRadius: borders.radiusMedium,
+    padding: spacing.m,
+    marginBottom: spacing.xl,
+    borderWidth: borders.borderWidth,
+    borderColor: colors.border, // Use consistent border color
   },
   coinItemRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingVertical: 10,
-    borderBottomWidth: 1,
-    borderBottomColor: '#333333',
+    paddingVertical: spacing.s,
+    borderBottomWidth: borders.borderWidth,
+    borderBottomColor: colors.border,
   },
   coinNameText: {
-    color: '#FFFFFF',
-    fontSize: 15,
+    color: colors.textPrimary,
+    fontSize: typography.body.fontSize - 1, // Slightly smaller
     fontWeight: '600',
-    flex: 2, // Allow more space for name
+    flex: 2,
   },
   coinDetailText: {
-    color: '#AEAEB2',
-    fontSize: 14,
+    color: colors.textSecondary,
+    fontSize: typography.label.fontSize,
     flex: 1,
     textAlign: 'right',
   },
@@ -216,33 +187,32 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingTop: 15,
-    marginTop: 5,
+    paddingTop: spacing.m,
+    marginTop: spacing.xs,
   },
   totalLabelText: {
-    color: '#FFFFFF',
-    fontSize: 16,
+    color: colors.textPrimary,
+    fontSize: typography.body.fontSize,
     fontWeight: 'bold',
     flex: 2,
   },
   totalValueText: {
-    color: '#FFFFFF',
-    fontSize: 16,
+    color: colors.textPrimary,
+    fontSize: typography.body.fontSize,
     fontWeight: 'bold',
     flex: 1,
     textAlign: 'right',
   },
   confirmButton: {
-    backgroundColor: '#8e8e93', // Grey button
-    paddingVertical: 16,
-    borderRadius: 8,
+    backgroundColor: colors.primaryButtonBackground, // Use themed button color
+    paddingVertical: spacing.m,
+    borderRadius: borders.radiusMedium,
     alignItems: 'center',
-    marginTop: 20,
+    marginTop: spacing.l,
   },
   confirmButtonText: {
-    color: '#FFFFFF',
-    fontSize: 18,
-    fontWeight: 'bold',
+    ...typography.button,
+    color: colors.primaryButtonText,
   },
 });
 
