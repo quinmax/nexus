@@ -1,32 +1,31 @@
 import React from 'react';
-import { View, Text, Image, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
+import { View, Text, Image, StyleSheet, TouchableOpacity, ScrollView, Alert } from 'react-native';
+import Clipboard from '@react-native-clipboard/clipboard'; // For copy functionality
 
 // Import assets and components
-import NexusLogo from '../assets/nexus_logo.png'; // Assuming it's a PNG
-import ProfileIcon from '../assets/ProfileIcon.jsx';
+import ProfileIcon from '../assets/ProfileIcon.jsx'; // Ensure this asset exists
 import ProfilePic from '../assets/profile_pic.png'; // Assuming it's a PNG
 import CopyIcon from '../assets/CopyIcon.jsx';
 import BottomNavBar from '../components/BottomNavBar.jsx';
+import ScreenHeader from '../components/ScreenHeader.jsx'; // Import reusable header
+import { colors, typography, spacing, borders, commonStyles } from '../theme/theme'; // Import theme
 
 const ProfileScreen = ({ navigation }) => {
   const handleCopy = (textToCopy) => {
-    // Implement your copy to clipboard logic here
-    // For example, using Clipboard API from 'react-native' or '@react-native-clipboard/clipboard'
-    console.log('Copied:', textToCopy);
-    // Clipboard.setString(textToCopy);
-    // Alert.alert("Copied to clipboard!");
+    Clipboard.setString(textToCopy);
+    Alert.alert("Copied", `${textToCopy} copied to clipboard!`);
+  };
+
+  const handleLogout = () => {
+    // Add any pre-logout logic here (e.g., clearing user session, tokens)
+    console.log('User logging out');
+    navigation.navigate('Login'); // Navigate to the Login screen
   };
 
   return (
     <View style={styles.safeArea}>
+      <ScreenHeader title="PROFILE" RightIconComponent={ProfileIcon} />
       <ScrollView style={styles.scrollView} contentContainerStyle={styles.scrollContentContainer}>
-        {/* Header Section */}
-        <View style={styles.headerContainer}>
-          <Image source={NexusLogo} style={styles.logo} />
-          <Text style={styles.headerTitle}>PROFILE</Text>
-          <ProfileIcon width={28} height={28} color="#FFFFFF" />
-        </View>
-
         {/* Profile Info Section */}
         <View style={styles.profileInfoContainer}>
           <Image source={ProfilePic} style={styles.profilePicture} />
@@ -35,11 +34,6 @@ const ProfileScreen = ({ navigation }) => {
             <Text style={styles.walletBalanceAmount}>R 42 457.75</Text>
           </View>
         </View>
-
-        {/* View/Edit Details Link */}
-        <TouchableOpacity onPress={() => console.log('Navigate to full account details')}>
-          <Text style={styles.editDetailsLink}>View/Edit full account details</Text>
-        </TouchableOpacity>
 
         {/* Account Details Fields */}
         <View style={styles.detailsSection}>
@@ -55,11 +49,11 @@ const ProfileScreen = ({ navigation }) => {
           <View style={styles.detailItem}>
             <Text style={styles.detailLabel}>Account number</Text>
             <View style={styles.detailBoxWithIcon}>
-              <View style={[styles.detailBox, styles.flexGrow]}>
+              <View style={styles.flexGrow}>
                 <Text style={styles.detailValue}>5262994995</Text>
               </View>
               <TouchableOpacity onPress={() => handleCopy('5262994995')} style={styles.copyIconContainer}>
-                <CopyIcon width={20} height={20} color="#888888" />
+                <CopyIcon width={20} height={20} color={colors.iconDefault} />
               </TouchableOpacity>
             </View>
           </View>
@@ -68,14 +62,24 @@ const ProfileScreen = ({ navigation }) => {
           <View style={styles.detailItem}>
             <Text style={styles.detailLabel}>Blockchain address</Text>
             <View style={styles.detailBoxWithIcon}>
-              <View style={[styles.detailBox, styles.flexGrow]}>
+              <View style={styles.flexGrow}>
                 <Text style={[styles.detailValue, styles.addressValue]}>0x4908d3a8F67Eb0359916Cd7Ae9033CC21c9d7249</Text>
               </View>
               <TouchableOpacity onPress={() => handleCopy('0x4908d3a8F67Eb0359916Cd7Ae9033CC21c9d7249')} style={styles.copyIconContainer}>
-                <CopyIcon width={20} height={20} color="#888888" />
+                <CopyIcon width={20} height={20} color={colors.iconDefault} />
               </TouchableOpacity>
             </View>
           </View>
+
+          {/* View/Edit Details Link - MOVED HERE */}
+          <TouchableOpacity onPress={() => console.log('Navigate to full account details')}>
+            <Text style={styles.editDetailsLink}>View/Edit full account details</Text>
+          </TouchableOpacity>
+
+          {/* Log Out Link - MOVED HERE */}
+          <TouchableOpacity onPress={handleLogout}>
+            <Text style={styles.logoutLink}>Log Out</Text>
+          </TouchableOpacity>
         </View>
       </ScrollView>
       {/* Bottom Navigation Bar */}
@@ -86,102 +90,95 @@ const ProfileScreen = ({ navigation }) => {
 
 const styles = StyleSheet.create({
   safeArea: {
-    flex: 1,
-    backgroundColor: '#000000',
+    ...commonStyles.safeArea,
   },
   scrollView: {
     flex: 1,
   },
   scrollContentContainer: {
-    paddingBottom: 80, // To ensure content is not hidden behind the absolute positioned BottomNavBar
-  },
-  headerContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingHorizontal: 15,
-    paddingTop: 15, // Adjust as needed for status bar
-    paddingBottom: 10,
-    borderBottomWidth: 1,
-    borderBottomColor: '#333333',
-  },
-  logo: {
-    width: 30,
-    height: 30,
-    resizeMode: 'contain',
-  },
-  headerTitle: {
-    color: '#FFFFFF',
-    fontSize: 20,
-    fontWeight: 'bold',
+    paddingBottom: spacing.xl + spacing.xl, // Ensure space for BottomNavBar
   },
   profileInfoContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    padding: 20,
+    padding: spacing.containerPadding,
   },
   profilePicture: {
     width: 80,
     height: 80,
     borderRadius: 40, // Make it circular
-    marginRight: 20,
+    marginRight: spacing.containerPadding,
   },
   walletBalanceContainer: {
     flex: 1,
+    alignItems: 'flex-end', // Align children to the right
   },
   walletBalanceLabel: {
-    color: '#FFFFFF',
-    fontSize: 16,
-    marginBottom: 5,
+    ...typography.body,
+    color: colors.textSecondary,
+    marginBottom: spacing.xs,
   },
   walletBalanceAmount: {
-    color: '#007AFF', // Blue color
-    fontSize: 22,
-    fontWeight: 'bold',
+    ...typography.h2,
+    color: colors.primary,
   },
   editDetailsLink: {
-    color: '#007AFF', // Blue color for links
-    fontSize: 14,
-    textAlign: 'left',
-    paddingHorizontal: 20,
-    marginBottom: 25,
+    ...typography.link,
+    color: '#4c4d4d', // Updated text color
+    textAlign: 'center',
+    paddingHorizontal: spacing.containerPadding,
+    marginBottom: spacing.m, // Adjusted for the logout link below
+    textDecorationLine: 'underline',
+  },
+  logoutLink: {
+    ...typography.link,
+    color: '#4c4d4d', // Updated text color
+    textAlign: 'center',
+    paddingHorizontal: spacing.containerPadding,
+    marginBottom: spacing.l, // Space before the details section
     textDecorationLine: 'underline',
   },
   detailsSection: {
-    paddingHorizontal: 20,
+    paddingHorizontal: spacing.containerPadding,
   },
   detailItem: {
-    marginBottom: 20,
+    marginBottom: spacing.l,
   },
   detailLabel: {
-    color: '#FFFFFF',
-    fontSize: 16,
-    marginBottom: 8,
+    ...typography.label,
+    color: colors.textPrimary, // Ensure label is clearly visible
+    marginBottom: spacing.s,
   },
   detailBox: {
-    backgroundColor: '#FFFFFF',
-    borderRadius: 8,
-    paddingVertical: 12,
-    paddingHorizontal: 15,
+    backgroundColor: colors.inputBackground,
+    borderRadius: borders.radiusMedium,
+    paddingVertical: spacing.inputPaddingVertical,
+    paddingHorizontal: spacing.inputPaddingHorizontal,
   },
   detailBoxWithIcon: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#FFFFFF', // White background for the whole row
-    borderRadius: 8,
+    backgroundColor: colors.inputBackground,
+    borderRadius: borders.radiusMedium,
+    paddingVertical: spacing.inputPaddingVertical, // Add vertical padding to the container
+    paddingLeft: spacing.inputPaddingHorizontal,   // Add left padding for the text part
   },
   flexGrow: {
     flex: 1, // Allows the text box to take available space
   },
   detailValue: {
-    color: '#000000',
-    fontSize: 16,
+    ...typography.body,
+    color: colors.inputText,
   },
   addressValue: {
-    fontSize: 14, // Slightly smaller for long addresses
+    ...typography.caption, // Use caption style for smaller address text
+    color: colors.inputText,
   },
   copyIconContainer: {
-    padding: 12, // Makes the touchable area larger
+    paddingRight: spacing.inputPaddingHorizontal, // Provide space on the right for the icon
+    paddingLeft: spacing.s, // Provide some space between text and icon
+    justifyContent: 'center', // Center icon if container is taller
+    alignItems: 'center',
   },
 });
 

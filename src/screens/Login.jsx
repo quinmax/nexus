@@ -9,6 +9,7 @@ const Login = ({ navigation }) => {
   const handleLogin = () => {
     // Add your login logic here
     console.log('Email:', email, 'Password:', password);
+    navigation.navigate('Profile'); // Navigate to the Profile screen
   };
 
   return (
@@ -55,7 +56,7 @@ const Login = ({ navigation }) => {
           <Text style={styles.linkText}>Register</Text>
         </TouchableOpacity>
         
-        <TouchableOpacity onPress={() => navigation.navigate('ForgotPassword')}>
+        <TouchableOpacity onPress={() => navigation.navigate('Reset')}>
           <Text style={styles.linkText}>Forgot details</Text>
         </TouchableOpacity>
       </View>
@@ -115,7 +116,8 @@ const styles = StyleSheet.create({
   },
   linkText: {
     ...typography.link, // Use themed link style
-    color: '#4c4d4d', // Updated text color for Register and Forgot details links
+    color: colors.primary, // Changed to use the theme's primary color
+    textDecorationLine: 'underline', // Added to underline the text
   },
 });
 

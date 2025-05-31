@@ -12,6 +12,9 @@ import Sent from '../screens/Sent.jsx'; // Import the new Confirm screen
 import History from '../screens/History.jsx'; // Import the new Confirm screen
 import Exchange from '../screens/Exchange.jsx'; // Import the new Confirm screen
 import Help from '../screens/Help.jsx'; // Import the new Confirm screen
+import Fulldetails from '../screens/Fulldetails.jsx'; // Import the new Confirm screen
+import Reset from '../screens/Reset.jsx'; // Import the new Reset screen
+import Resetdone from '../screens/Resetdone.jsx'; // Import the new Resetdone screen
 
 const Stack = createStackNavigator();
 
@@ -29,6 +32,9 @@ function AppNavigator()
 			<Stack.Screen name="History" component={History} />
 			<Stack.Screen name="Exchange" component={Exchange} />
 			<Stack.Screen name="Help" component={Help} />
+			<Stack.Screen name="Fulldetails" component={Fulldetails} />
+			<Stack.Screen name="Reset" component={Reset} />
+			<Stack.Screen name="Resetdone" component={Resetdone} />
 		</Stack.Navigator>
 	);
 }

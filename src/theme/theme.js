@@ -1,9 +1,9 @@
 export const colors = {
   background: '#000000',
   surface: '#101010', // For cards like in Confirm.jsx
-  primary: '#007AFF', // Primary accent color (e.g., iOS blue)
+  primary: '#6482A4', // An even softer, desaturated blue (greyish-blue)
 
-  primaryButtonBackground: '#007AFF', // Using the primary accent for buttons
+  primaryButtonBackground: '#6482A4', // Using the new, even more subtle primary
   primaryButtonText: '#FFFFFF',
 
   secondaryButtonBackground: '#2C2C2E', // Darker grey for secondary actions
@@ -21,13 +21,13 @@ export const colors = {
   disabledText: '#8E8E93',
 
   border: '#333333', // General border color
-  error: '#FF3B30', // Standard red for errors
+  error: '#D3756B', // A more muted, dusty rose/brick red
   success: '#34C759', // Standard green for success
 
   iconDefault: '#FFFFFF',
 
   bottomNavBarBackground: '#0A0A0A',
-  bottomNavBarIconActive: '#007AFF', // Use primary color for active icons
+  bottomNavBarIconActive: '#6482A4', // Using the new, even more subtle primary
   bottomNavBarIconInactive: '#8E8E93',
 };
 

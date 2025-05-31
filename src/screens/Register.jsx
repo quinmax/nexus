@@ -1,16 +1,16 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, ScrollView, Image, StyleSheet } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, ScrollView, StyleSheet } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
-import { colors, typography, spacing, borders, commonStyles } from '../theme/theme';
-import ScreenHeader from '../components/ScreenHeader.jsx'; // Import the reusable header
-import RegisterIcon from '../assets/RegisterIcon.jsx'; // Import the RegisterIcon
+import { colors, typography, spacing, borders } from '../theme/theme';
+import ScreenHeader from '../components/ScreenHeader.jsx';
+import RegisterIcon from '../assets/RegisterIcon.jsx';
 
-const Register = ({ navigation }) => { // Added navigation prop
+const Register = ({ navigation }) => {
   const [selectedCountry, setSelectedCountry] = useState('');
 
   return (
     <ScrollView style={styles.scrollContainer} contentContainerStyle={styles.contentContainer} keyboardShouldPersistTaps="handled">
-      <View style={{ marginBottom: spacing.l }}> {/* Added wrapper with marginBottom */}
+      <View style={{ marginBottom: spacing.l }}>
         <ScreenHeader title="REGISTER" RightIconComponent={RegisterIcon} showBorder={false} />
       </View>
 
@@ -43,7 +43,7 @@ const Register = ({ navigation }) => { // Added navigation prop
         autoCapitalize="none"
       />
       
-      {/* Country Picker */}
+      {/* Country Picker - Fixed text color handling */}
       <View style={styles.inputRow}>
         <Text style={styles.label}>Country</Text>
         <View style={styles.inputBox}>
@@ -54,9 +54,9 @@ const Register = ({ navigation }) => { // Added navigation prop
             ]}
             selectedValue={selectedCountry}
             onValueChange={(itemValue) => setSelectedCountry(itemValue)}
-            dropdownIconColor={colors.inputText} // Match text color or use a specific icon color
+            dropdownIconColor={colors.inputText}
           >
-            <Picker.Item label="Select Country" value="" color={colors.textPlaceholder} />
+            <Picker.Item label="Select Country" value="" />
             <Picker.Item label="Country 1" value="country1" />
             <Picker.Item label="Country 2" value="country2" />
           </Picker>
@@ -80,8 +80,8 @@ const Register = ({ navigation }) => { // Added navigation prop
         <Text style={styles.registerButtonText}>REGISTER</Text>
       </TouchableOpacity>
       
-      <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
-        <Text style={styles.backButtonText}>Back</Text>
+      <TouchableOpacity style={styles.backToLoginButton} onPress={() => navigation.navigate('Login')}>
+        <Text style={styles.backToLoginButtonText}>Back to login</Text>
       </TouchableOpacity>
     </ScrollView>
   );
@@ -93,7 +93,7 @@ const InputField = ({ label, placeholder, keyboardType, autoCapitalize }) => (
     <TextInput
       style={styles.inputBox}
       placeholder={placeholder}
-      placeholderTextColor={colors.textPlaceholder} // Use themed placeholder color
+      placeholderTextColor={colors.textPlaceholder}
       keyboardType={keyboardType}
       autoCapitalize={autoCapitalize}
     />
@@ -103,73 +103,59 @@ const InputField = ({ label, placeholder, keyboardType, autoCapitalize }) => (
 const styles = StyleSheet.create({
   scrollContainer: {
     flex: 1,
-    backgroundColor: colors.background, // Ensures black background from theme
+    backgroundColor: colors.background,
   },
   contentContainer: {
     padding: spacing.containerPadding,
-    paddingBottom: spacing.xl, // Consistent padding from theme
-  },
-  // The existing styles from your Register.jsx context continue below.
-  // Note: Many of these are currently hardcoded and do not use the theme.
-  container: {
-    flex: 1,
-    backgroundColor: colors.background, // Use theme
-    padding: spacing.containerPadding, // Use theme
+    paddingBottom: spacing.xl,
   },
   inputRow: {
-    // flexDirection: 'row', // Removed for column layout
-    // alignItems: 'center', // Removed for column layout
-    marginBottom: spacing.m, // Use themed spacing
+    marginBottom: spacing.m,
   },
   label: {
-    // color: 'white', // Will use theme
-    // width: 120, // No longer needed for stacked layout
-    // marginRight: 10, // No longer needed
-    ...typography.label, // Apply themed label style
-    color: colors.textPrimary, // Ensure label text is visible, or use textSecondary if preferred
-    marginBottom: spacing.s, // Add space below the label
+    ...typography.label,
+    color: colors.textPrimary,
+    marginBottom: spacing.s,
   },
   inputBox: {
-    // flex: 1, // No longer needed as it takes full width
-    backgroundColor: colors.inputBackground, // Use themed input background
-    color: colors.inputText, // Use themed input text color
-    borderRadius: borders.radiusMedium, // Use themed border radius
-    paddingHorizontal: spacing.inputPaddingHorizontal, // Use themed padding
-    paddingVertical: spacing.inputPaddingVertical, // Use themed padding
-    fontSize: typography.body.fontSize, // Use themed font size
-    borderWidth: borders.borderWidth, // Use themed border width
-    borderColor: colors.inputBorder, // Use themed border color
-    width: '100%', // Ensure input takes full width
+    backgroundColor: colors.inputBackground,
+    color: colors.inputText,
+    borderRadius: borders.radiusMedium,
+    paddingHorizontal: spacing.inputPaddingHorizontal,
+    paddingVertical: spacing.inputPaddingVertical,
+    fontSize: typography.body.fontSize,
+    borderWidth: borders.borderWidth,
+    borderColor: colors.inputBorder,
+    width: '100%',
   },
   addressInput: {
     height: 100,
     textAlignVertical: 'top',
-    paddingTop: spacing.inputPaddingVertical, // Ensure padding is consistent for multiline
+    paddingTop: spacing.inputPaddingVertical,
   },
   picker: {
-    color: colors.inputText, // Use themed text color for picker
-    // backgroundColor: colors.inputBackground, // Picker styling can be tricky; often inherits from parent View
+    color: colors.inputText,
   },
   registerButton: {
-    backgroundColor: '#1f2531', // Updated button color
-    paddingVertical: spacing.m, // Use themed spacing
-    borderRadius: borders.radiusMedium, // Use themed border radius
+    backgroundColor: '#1f2531',
+    paddingVertical: spacing.m,
+    borderRadius: borders.radiusMedium,
     alignItems: 'center',
-    marginTop: spacing.l, // Use themed spacing
+    marginTop: spacing.l,
   },
-  registerButtonText: { // Renamed for clarity and consistency
-    ...typography.button, // Use themed button typography
-    color: colors.primaryButtonText, // Use themed button text color
+  registerButtonText: {
+    ...typography.button,
+    color: colors.primaryButtonText,
   },
-  backButton: {
+  backToLoginButton: {
     alignSelf: 'center',
-    marginTop: 15,
-    padding: spacing.s, // Add some padding for easier tapping
+    marginTop: spacing.l,
+    padding: spacing.s,
   },
-  backText: {
-    ...typography.link, // Use themed link style
-    color: colors.textSecondary, // Softer color for "Back"
-    textDecorationLine: 'none', // Or 'underline' if preferred
+  backToLoginButtonText: {
+    ...typography.link,
+    color: colors.primary,
+    textDecorationLine: 'underline',
   },
 });
 
