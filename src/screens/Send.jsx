@@ -11,22 +11,15 @@ const Send = ({ navigation }) => {
   // Hardcoded data as per requirements
   const coins = [
     {
-      name: "Kingdom Coin #1",
-      walletQuantity: "2",
-      walletValue: "R 22 457,75",
-      sendQuantitySelected: "0",
-      sendValueSelected: "R 0.00"
-    },
-    {
-      name: "Kingdom Coin #2",
-      walletQuantity: "2",
-      walletValue: "R 22 457,75",
-      sendQuantitySelected: "0",
-      sendValueSelected: "R 0.00"
+      name: "Kingdom Coin 1 Oz fine gold",
+      walletQuantity: "0.824",
+      walletValue: "R 49 118.61",
+      sendQuantitySelected: "0.011",
+      sendValueSelected: "R 655.71"
     },
   ];
-  const totalQTY = "0";
-  const totalSend = "R 0,00"; // Hardcoded as per reference
+  const totalQTY = "0.011";
+  const totalSend = "R 655.71"; // Hardcoded as per reference
 
   return (
     <View style={commonStyles.safeArea}>
@@ -55,7 +48,7 @@ const Send = ({ navigation }) => {
                 <View style={styles.coinInfoColumn}>
                   <Text style={styles.columnSubHeader}>Wallet</Text>
                   <View style={styles.detailRow}>
-                    <Text style={styles.detailLabel}>Qty:</Text>
+                    <Text style={styles.detailLabel}>Oz:</Text>
                     <Text style={styles.detailValue}>{coin.walletQuantity}</Text>
                   </View>
                   <View style={styles.detailRow}>
@@ -67,20 +60,18 @@ const Send = ({ navigation }) => {
                 {/* Send Info Part for this coin */}
                 <View style={styles.coinInfoColumn}>
                   <Text style={styles.columnSubHeader}>Send</Text>
-                  <View style={styles.detailRow}>
-                    <Text style={styles.detailLabel}>Qty:</Text>
+                  <View style={styles.detailRow}> 
                     <View style={styles.quantityControls}>
                       <TouchableOpacity style={styles.quantityButton} onPress={() => console.log('Decrement quantity for ' + coin.name)}>
                         <Text style={styles.quantityButtonText}>-</Text>
                       </TouchableOpacity>
-                      <Text style={styles.quantityValueText}>{coin.sendQuantitySelected}</Text>
                       <TouchableOpacity style={styles.quantityButton} onPress={() => console.log('Increment quantity for ' + coin.name)}>
                         <Text style={styles.quantityButtonText}>+</Text>
                       </TouchableOpacity>
+                      <Text style={styles.quantityValueText}>{coin.sendQuantitySelected}</Text>
                     </View>
                   </View>
-                  <View style={styles.detailRow}>
-                    <Text style={styles.detailLabel}>Value:</Text>
+                  <View style={styles.detailRow}> 
                     <Text style={styles.detailValue}>{coin.sendValueSelected}</Text>
                   </View>
                 </View>
@@ -91,7 +82,7 @@ const Send = ({ navigation }) => {
           {/* Totals Section */}
           <View style={styles.totalsSection}>
             <View style={styles.totalRowItem}>
-              <Text style={styles.totalLabel}>Total Send Quantity:</Text>
+              <Text style={styles.totalLabel}>Total Send Ounces:</Text>
               <Text style={styles.totalValueText}>{totalQTY}</Text>
             </View>
             <View style={styles.totalRowItem}>
@@ -183,7 +174,7 @@ const styles = StyleSheet.create({
     color: colors.textSecondary,
     fontSize: typography.label.fontSize + 1, // Slightly larger label
     marginBottom: spacing.m,
-    textAlign: 'center',
+    textAlign: 'right', // Changed from 'center' to 'right'
   },
   detailRow: {
     flexDirection: 'row',
@@ -229,7 +220,7 @@ const styles = StyleSheet.create({
     lineHeight: typography.h2.fontSize + 2, // Adjust for vertical centering
   },
   quantityValueText: {
-    ...typography.body,
+    ...typography.caption, // Changed from typography.body to match detailValue
     color: colors.textPrimary,
     minWidth: 25, // Ensure space for the number
     textAlign: 'center',
@@ -237,7 +228,7 @@ const styles = StyleSheet.create({
   },
   // Totals Section Styles
   totalsSection: {
-    marginTop: spacing.xl,
+    // marginTop: spacing.s, // Removed marginTop to reduce space further
     paddingVertical: spacing.m,
     paddingHorizontal: spacing.m,
     borderTopWidth: borders.borderWidth,

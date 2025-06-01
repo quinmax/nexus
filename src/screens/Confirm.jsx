@@ -16,22 +16,42 @@ const Confirm = ({ navigation }) => {
 
   const coinsToConfirm = [
     {
-      name: "Kingdom Coin #1",
-      quantity: "1",
-      value: "R 11 228.50"
-    },
-    {
-      name: "Kingdom Coin #2",
-      quantity: "1",
-      value: "R 11 228.50"
+      name: "Kingdom Coin 1 Oz fine gold",
+      quantity: "0.011", // Updated quantity value
+      value: "R 119.22"
     },
   ];
 
-  const totalQuantity = coinsToConfirm.reduce((sum, coin) => sum + parseInt(coin.quantity, 10), 0).toString();
-  const totalValue = coinsToConfirm.reduce((sum, coin) => {
-    const numericValue = parseFloat(coin.value.replace("R ", "").replace(",", "."));
-    return sum + numericValue;
-  }, 0).toLocaleString('en-ZA', { style: 'currency', currency: 'ZAR' });
+  // Calculate the total quantity, now handling floating point numbers
+  const numericTotalQuantity = coinsToConfirm.reduce((sum, coin) => {
+    const quantityValue = parseFloat(coin.quantity); // Use parseFloat for decimal quantities
+    return sum + (isNaN(quantityValue) ? 0 : quantityValue);
+  }, 0);
+  // Format total quantity, e.g., to 3 decimal places if inputs are like "0.011"
+  const totalQuantity = numericTotalQuantity.toFixed(3);
+
+  // Calculate the raw numeric total, correctly parsing values like "R 29 804.98"
+  const rawNumericTotal = coinsToConfirm.reduce((sum, coin) => {
+    // Sanitize the string: remove "R ", remove spaces (thousands separators), replace comma decimal with period
+    const valueString = coin.value
+      .replace("R ", "")      // Remove "R " prefix
+      .replace(/\s/g, "")     // Remove all spaces (e.g., from "29 804.98" to "29804.98")
+      .replace(",", ".");     // Convert comma decimal separator to period (if any)
+    const numericValue = parseFloat(valueString);
+    return sum + (isNaN(numericValue) ? 0 : numericValue); // Add 0 if parsing fails, otherwise add the number
+  }, 0);
+
+  // Custom function to format the currency as "R xxx xxx.xx"
+  const formatCurrencyCustomSpaceSeparated = (value) => {
+    const num = Number(value);
+    const fixedNumStr = num.toFixed(2); // e.g., "29924.20"
+    const parts = fixedNumStr.split('.');
+    const integerPart = parts[0]; // e.g., "29924"
+    const decimalPart = parts[1]; // e.g., "20"
+    const formattedIntegerPart = integerPart.replace(/\B(?=(\d{3})+(?!\d))/g, " "); // e.g., "29 924"
+    return `R ${formattedIntegerPart}.${decimalPart}`; // e.g., "R 29 924.20"
+  };
+  const totalValue = formatCurrencyCustomSpaceSeparated(rawNumericTotal);
 
   const handleConfirm = () => {
     // Logic for confirming the transaction
@@ -87,15 +107,19 @@ const Confirm = ({ navigation }) => {
           <View style={styles.coinCardSection}>
             {coinsToConfirm.map((coin, index) => (
               <View key={`confirm-coin-${index}`} style={styles.coinItemRow}>
-                <Text style={styles.coinNameText}>{coin.name}</Text>
-                <Text style={styles.coinDetailText}>Qty: {coin.quantity}</Text>
-                <Text style={styles.coinDetailText}>{coin.value}</Text>
+                <Text style={styles.coinNameTextLg}>{coin.name}</Text>
+                <View style={styles.coinSubDetailsRow}>
+                  <Text style={styles.coinQuantityText}>Oz: {coin.quantity}</Text> 
+                  <Text style={styles.coinValueText}>{coin.value}</Text>
+                </View>
               </View>
             ))}
             <View style={styles.totalRow}>
-              <Text style={styles.totalLabelText}>Total</Text>
-              <Text style={styles.totalValueText}>QTY: {totalQuantity}</Text>
-              <Text style={styles.totalValueText}>{totalValue}</Text>
+              <Text style={styles.totalLabelHeading}>Total</Text>
+              <View style={styles.totalSubDetailsRow}>
+                <Text style={styles.totalQuantityText}>Oz: {totalQuantity}</Text> 
+                <Text style={styles.totalCurrencyValueText}>{totalValue}</Text>
+              </View>
             </View>
           </View>
 
@@ -170,50 +194,74 @@ const styles = StyleSheet.create({
   },
   coinItemRow: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    flexDirection: 'column', // Changed to arrange name above sub-details
+    alignItems: 'flex-start', // Align items to the start of the column
     paddingVertical: spacing.s,
     borderBottomWidth: borders.borderWidth,
     borderBottomColor: colors.border,
   },
-  coinNameText: {
+  coinNameTextLg: { // Renamed to avoid conflict if coinNameText is used elsewhere with different styles
     color: colors.textPrimary,
     fontSize: typography.body.fontSize - 1, // Slightly smaller
     fontWeight: '600',
-    flex: 2,
+    marginBottom: spacing.xs, // Add space between name and sub-details
+    // flex: 2, // Removed as it's not needed in column layout
   },
-  coinDetailText: {
+  coinSubDetailsRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    width: '100%', // Ensure it spans the full width
+  },
+  coinQuantityText: { // Style for "Qty: ..."
     color: colors.textSecondary,
     fontSize: typography.label.fontSize,
-    flex: 1,
+    textAlign: 'left', // Align quantity to the left
+  },
+  coinValueText: { // Style for the currency value
+    color: colors.textSecondary,
+    fontSize: typography.label.fontSize,
     textAlign: 'right',
+    // flex: 1, // Retain flex if you want value to push to the right, works with justifyContent: 'space-between'
   },
   totalRow: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    flexDirection: 'column', // Changed to stack heading above sub-details
+    alignItems: 'flex-start', // Align items to the start
     paddingTop: spacing.m,
     marginTop: spacing.xs,
   },
-  totalLabelText: {
+  totalLabelHeading: { // Renamed for clarity
     color: colors.textPrimary,
     fontSize: typography.body.fontSize,
     fontWeight: 'bold',
-    flex: 2,
+    marginBottom: spacing.xs, // Space between "Total" and the line below
+    // flex: 2, // Removed as it's a heading now
   },
-  totalValueText: {
+  totalSubDetailsRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    width: '100%', // Ensure it spans the full width
+  },
+  totalQuantityText: { // Style for "QTY: ..." in the total section
     color: colors.textPrimary,
     fontSize: typography.body.fontSize,
     fontWeight: 'bold',
-    flex: 1,
+    textAlign: 'left', // Align quantity to the left
+    // flex: 1, // Adjust flex as needed, or remove if space-between on parent is enough
+  },
+  totalCurrencyValueText: { // Style for the currency value in the total section
+    color: colors.textPrimary,
+    fontSize: typography.body.fontSize,
+    fontWeight: 'bold',
     textAlign: 'right',
+    // flex: 1, // Adjust flex as needed
   },
   confirmButton: {
     backgroundColor: '#1f2531', // Match other primary action buttons
     paddingVertical: spacing.m,
     borderRadius: borders.radiusMedium,
     alignItems: 'center',
-    marginTop: spacing.m, // Reduced space above the button
+    marginTop: 0, // Removed top margin for the tightest fit
   },
   confirmButtonText: {
     ...typography.button,

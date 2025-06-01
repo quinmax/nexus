@@ -31,7 +31,7 @@ const ProfileScreen = ({ navigation }) => {
           <Image source={ProfilePic} style={styles.profilePicture} />
           <View style={styles.walletBalanceContainer}>
             <Text style={styles.walletBalanceLabel}>Wallet balance</Text>
-            <Text style={styles.walletBalanceAmount}>R 42 457.75</Text>
+            <Text style={styles.walletBalanceAmount}>R 49 118.61</Text>
           </View>
         </View>
 
@@ -104,9 +104,9 @@ const styles = StyleSheet.create({
     padding: spacing.containerPadding,
   },
   profilePicture: {
-    width: 80,
-    height: 80,
-    borderRadius: 40, // Make it circular
+    width: 160, // Doubled from 80
+    height: 160, // Doubled from 80
+    borderRadius: 80, // Doubled from 40 to keep it circular
     marginRight: spacing.containerPadding,
   },
   walletBalanceContainer: {
@@ -120,7 +120,7 @@ const styles = StyleSheet.create({
   },
   walletBalanceAmount: {
     ...typography.h2,
-    color: colors.primary,
+    color: '#FFFFFF', // Changed to white
   },
   editDetailsLink: {
     ...typography.link,

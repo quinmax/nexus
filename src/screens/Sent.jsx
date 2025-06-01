@@ -42,7 +42,8 @@ const styles = StyleSheet.create({
   },
   scrollContentContainer: {
     flexGrow: 1, // Ensure content can fill space or scroll
-    justifyContent: 'flex-start', // Align content to the top
+    justifyContent: 'center', // Center content vertically
+    alignItems: 'center', // Center contentBody horizontally
     paddingBottom: spacing.xl, // Add some padding at the bottom
   },
   contentBody: {
