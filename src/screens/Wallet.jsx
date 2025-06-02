@@ -61,7 +61,9 @@ const Wallet = ({ navigation }) => {
   const coin1Details = [
     "Current value per coin: R 59 609.96",
     "Vault verified: 20/05/2025",
-    "Total in vault: 100",
+    "Total Coins in vault: 20",
+    "Blockchain fraction : 0.001",
+    "Total fractions : 20 000",
   ];
 
   const handleViewCoinDetails = (coinName) => {
