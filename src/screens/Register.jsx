@@ -101,7 +101,7 @@ const Register = ({ navigation }) => {
       
       <TouchableOpacity style={styles.backToLoginButton} onPress={() => navigation.navigate('Login')}>
         <Text style={styles.backToLoginButtonText}>Back to login</Text>
-      </TouchableOpacity>
+      </TouchableOpacity> 
     </ScrollView>
   );
 };
