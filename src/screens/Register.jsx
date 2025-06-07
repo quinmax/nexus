@@ -3,6 +3,7 @@ import { View, Text, TextInput, TouchableOpacity, ScrollView, StyleSheet } from 
 import { Picker } from '@react-native-picker/picker';
 import { colors, typography, spacing, borders } from '../theme/theme';
 import ScreenHeader from '../components/ScreenHeader.jsx';
+import { countries } from '../utils/countries.js'; // Import the country list
 import RegisterIcon from '../assets/RegisterIcon.jsx';
 
 const Register = ({ navigation }) => {
@@ -42,6 +43,18 @@ const Register = ({ navigation }) => {
         keyboardType="email-address"
         autoCapitalize="none"
       />
+      <InputField
+        label="Password"
+        placeholder="Enter password"
+        autoCapitalize="none"
+        secureTextEntry
+      />
+      <InputField
+        label="Confirm password"
+        placeholder="Confirm password"
+        autoCapitalize="none"
+        secureTextEntry
+      />
       
       {/* Country Picker - Fixed text color handling */}
       <View style={styles.inputRow}>
@@ -56,9 +69,10 @@ const Register = ({ navigation }) => {
             onValueChange={(itemValue) => setSelectedCountry(itemValue)}
             dropdownIconColor={colors.inputText}
           >
-            <Picker.Item label="Select Country" value="" />
-            <Picker.Item label="Country 1" value="country1" />
-            <Picker.Item label="Country 2" value="country2" />
+            <Picker.Item label="Select Country..." value="" />
+            {countries.map((country) => (
+              <Picker.Item key={country.value} label={country.label} value={country.value} />
+            ))}
           </Picker>
         </View>
       </View>
@@ -92,7 +106,7 @@ const Register = ({ navigation }) => {
   );
 };
 
-const InputField = ({ label, placeholder, keyboardType, autoCapitalize }) => (
+const InputField = ({ label, placeholder, keyboardType, autoCapitalize, secureTextEntry }) => (
   <View style={styles.inputRow}>
     <Text style={styles.label}>{label}</Text>
     <TextInput
@@ -101,6 +115,7 @@ const InputField = ({ label, placeholder, keyboardType, autoCapitalize }) => (
       placeholderTextColor={colors.textPlaceholder}
       keyboardType={keyboardType}
       autoCapitalize={autoCapitalize}
+      secureTextEntry={secureTextEntry}
     />
   </View>
 );
