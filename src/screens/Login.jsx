@@ -5,11 +5,59 @@ import { colors, typography, spacing, borders, commonStyles } from '../theme/the
 const Login = ({ navigation }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
 
-  const handleLogin = () => {
-    // Add your login logic here
-    console.log('Email:', email, 'Password:', password);
-    navigation.navigate('Profile'); // Navigate to the Profile screen
+  const handleLogin = async () => {
+    console.log('handleLogin function called'); // <-- Add this very first line
+    console.log('Current email:', email, 'Current password:', password); // <-- Log current values
+    setError(''); // Clear previous errors
+    if (!email || !password) {
+      console.log('Validation failed: Email or password is empty.'); // <-- Log if validation fails
+      setError('Please enter both email and password.');
+      return;
+    }
+
+    try {
+      console.log('Attempting to fetch from: http://192.168.101.112:8000/api/login');
+      // Replace with your actual Laravel backend IP/domain if not localhost
+      // For Android emulator, use 10.0.2.2 to access localhost of the host machine
+      // For iOS simulator, localhost usually works. For physical devices, use your machine's network IP.
+      const response = await fetch('http://192.168.101.112:8000/api/login', { // Example for Android Emulator
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        },
+        body: JSON.stringify({ email, password }),
+      });
+      console.log('Fetch call completed. Response received.');
+      console.log('Login response status:', response.status); // Log status
+      // console.log('Response headers:', JSON.stringify(Object.fromEntries(response.headers.entries()))); // Optional: Log all headers
+
+      console.log('Attempting to parse response as JSON...');
+      const data = await response.json();
+      console.log('Response parsed as JSON successfully.');
+      console.log('Login response data:', data); // Log data
+
+      if (response.ok) {
+        console.log('Login successful:', data);
+        // TODO: Store the token securely (e.g., AsyncStorage)
+        navigation.navigate('Profile'); // Navigate to the Profile screen
+      } else if (response.status === 403 && data.message && data.message.includes('Email not verified')) {
+        console.log('Setting "Email not verified" error:', data.message); // Log before setError
+        setError(data.message + " You might need to check your spam folder.");
+      } else {
+        console.log('Setting generic login error:', data.message || 'Login failed.'); // Log before setError
+        setError(data.message || 'Login failed. Please check your credentials.');
+      }
+    } catch (e) {
+      console.error('Login fetch/catch error:', e); // More specific log
+      console.error('Error Name:', e.name);
+      console.error('Error Message:', e.message);
+      // It's possible e.stack is not available or very large, log conditionally or inspect `e` directly
+      // console.error('Error Stack:', e.stack);
+      setError('An unexpected error occurred. Please try again.');
+    }
   };
 
   return (
@@ -32,7 +80,10 @@ const Login = ({ navigation }) => {
         keyboardType="email-address"
         autoCapitalize="none"
         value={email}
-        onChangeText={setEmail}
+        onChangeText={(text) => {
+          console.log('Email TextInput changed:', text);
+          setEmail(text);
+        }}
       />
 
       {/* Password Input */}
@@ -42,8 +93,16 @@ const Login = ({ navigation }) => {
         placeholderTextColor={colors.textPlaceholder}
         secureTextEntry
         value={password}
-        onChangeText={setPassword}
+        onChangeText={(text) => {
+          console.log('Password TextInput changed:', text);
+          setPassword(text);
+        }}
       />
+
+      {/* Error Message Display */}
+      {error ? (
+        <Text style={styles.errorText}>{error}</Text>
+      ) : null}
 
       {/* Login Button */}
       <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
@@ -102,7 +161,7 @@ const styles = StyleSheet.create({
     borderRadius: borders.radiusMedium,
     alignItems: 'center',
     justifyContent: 'center',
-    marginTop: spacing.l, // 20-24
+    marginTop: spacing.m, // Adjusted margin if error text is present
   },
   loginButtonText: { // Renamed from buttonText
     ...typography.button,
@@ -118,6 +177,12 @@ const styles = StyleSheet.create({
     ...typography.link, // Use themed link style
     color: colors.primary, // Changed to use the theme's primary color
     textDecorationLine: 'underline', // Added to underline the text
+  },
+  errorText: {
+    ...typography.body,
+    color: colors.error, // Assuming you have an error color in your theme
+    marginBottom: spacing.m,
+    textAlign: 'center',
   },
 });
 

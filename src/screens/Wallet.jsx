@@ -8,10 +8,6 @@ import BottomNavBar from '../components/BottomNavBar.jsx';
 import ScreenHeader from '../components/ScreenHeader.jsx'; // Import reusable header
 import { colors, typography, spacing, borders, commonStyles } from '../theme/theme'; // Import theme
 
-// Enable LayoutAnimation for Android
-if (Platform.OS === 'android' && UIManager.setLayoutAnimationEnabledExperimental) {
-  UIManager.setLayoutAnimationEnabledExperimental(true);
-}
 
 const CoinCard = ({ title, displayMetricValue, imageSrc, details, onViewFullDetailsPress, displayValue }) => {
   const [isExpanded, setIsExpanded] = useState(false);

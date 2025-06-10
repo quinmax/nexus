@@ -16,6 +16,7 @@ import Fulldetails from '../screens/Fulldetails.jsx'; // Import the new Confirm 
 import Reset from '../screens/Reset.jsx'; // Import the new Reset screen
 import Resetdone from '../screens/Resetdone.jsx'; // Import the new Resetdone screen
 import Registered from '../screens/Registered.jsx'; // Import the new Registered screen
+import RegerrorScreen from '../screens/Regerror.jsx'; // Import the Regerror screen
 
 const Stack = createStackNavigator();
 
@@ -37,6 +38,7 @@ function AppNavigator()
 			<Stack.Screen name="Reset" component={Reset} />
 			<Stack.Screen name="Resetdone" component={Resetdone} />
 			<Stack.Screen name="Registered" component={Registered} />
+			<Stack.Screen name="Regerror" component={RegerrorScreen} options={{ headerShown: false }} />
 		</Stack.Navigator>
 	);
 }

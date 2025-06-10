@@ -23,7 +23,8 @@ export const colors = {
   border: '#333333', // General border color
   error: '#D3756B', // A more muted, dusty rose/brick red
   success: '#34C759', // Standard green for success
-
+  errorBackground: '#2D1B1A', // A dark, muted red background for error messages
+  
   iconDefault: '#FFFFFF',
 
   bottomNavBarBackground: '#0A0A0A',
