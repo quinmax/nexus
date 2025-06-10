@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <network-security-config>
     <domain-config cleartextTrafficPermitted="true">
+        <domain includeSubdomains="true">localhost</domain>
         <domain includeSubdomains="true">10.0.2.2</domain> <!-- Emulator localhost -->
-        <domain includeSubdomains="true">192.168.101.112</domain> <!-- e.g., 192.168.1.100 -->
-        <domain includeSubdomains="true">localhost</domain> <!-- Just in case -->
+        <domain includeSubdomains="true">192.168.23.113</domain> <!-- Your local server IP -->
     </domain-config>
+    <!-- You can also have a base-config or other domain-configs here -->
 </network-security-config>

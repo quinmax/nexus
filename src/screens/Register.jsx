@@ -3,7 +3,8 @@ import { View, Text, TextInput, TouchableOpacity, ScrollView, StyleSheet } from 
 import { Picker } from '@react-native-picker/picker';
 import { colors, typography, spacing, borders } from '../theme/theme';
 import ScreenHeader from '../components/ScreenHeader.jsx';
-import { countries } from '../utils/countries.js'; 
+import axios from 'axios'; // Import axios
+import { countries } from '../utils/countries.js';
 import RegisterIcon from '../assets/RegisterIcon.jsx';
 
 const Register = ({ navigation }) => {
@@ -16,78 +17,100 @@ const Register = ({ navigation }) => {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [selectedCountry, setSelectedCountry] = useState('');
   const [address, setAddress] = useState('');
-  const [isLoading, setIsLoading] = useState(false); 
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleRegister = async () => {
-    console.log('handleRegister called');
-
-    if (isLoading) return; 
+    if (isLoading) return;
     if (!accountName.trim()) return navigation.navigate('Regerror', { errorMessage: "Account name cannot be blank." });
     if (!fullName.trim()) return navigation.navigate('Regerror', { errorMessage: "Full name cannot be blank." });
     if (!surname.trim()) return navigation.navigate('Regerror', { errorMessage: "Surname cannot be blank." });
     if (!email.trim()) return navigation.navigate('Regerror', { errorMessage: "Email address cannot be blank." });
     if (!confirmEmail.trim()) return navigation.navigate('Regerror', { errorMessage: "Confirm email cannot be blank." });
-    if (!password) return navigation.navigate('Regerror', { errorMessage: "Password cannot be blank." }); 
+    if (!password) return navigation.navigate('Regerror', { errorMessage: "Password cannot be blank." });
     if (!confirmPassword) return navigation.navigate('Regerror', { errorMessage: "Confirm password cannot be blank." });
     if (!selectedCountry) return navigation.navigate('Regerror', { errorMessage: "Country cannot be blank." });
     if (!address.trim()) return navigation.navigate('Regerror', { errorMessage: "Address cannot be blank." });
 
-   
+
     if (email !== confirmEmail) {
       return navigation.navigate('Regerror', { errorMessage: "Your Email and Confirm email do not match." });
     }
     if (password !== confirmPassword) {
       return navigation.navigate('Regerror', { errorMessage: "Your Password and Confirm password do not match." });
     }
-    console.log('Attempting to register with:', { accountName, fullName, surname, email, selectedCountry, address });
     try {
-      setIsLoading(true); 
-      const response = await fetch('http://192.168.101.112/api/register', { 
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json',
-        },
-        body: JSON.stringify({
+      setIsLoading(true);
+      const url = 'http://192.168.23.113/api/register';
+      console.log("Attempting POST with axios to:", url);
+
+      const response = await axios.post(url,
+        { // Request body
           account_name: accountName,
-          full_name: fullName, 
+          full_name: fullName,
           surname: surname,
           email: email,
           password: password,
           password_confirmation: confirmPassword,
           country: selectedCountry,
           address: address,
-        }),
-      });
+        },
+        { // Config object for headers
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+          }
+        }
+      );
 
-      console.log('Response status:', response.status);
-      const data = await response.json();
-      console.log('Response data:', data);
+      console.log("Axios request response status:", response.status);
+      console.log("Axios response data:", response.data);
 
-      if (response.ok) {
-        console.log('Registration successful. Navigating...');
-        navigation.navigate('Registered'); 
+      const data = response.data;
+
+      if (response.status >= 200 && response.status < 300) {
+        navigation.navigate('Registered');
       } else {
+        // This path might not be hit if axios throws an error for non-2xx statuses,
+        // but included for completeness or if specific non-error handling for 2xx is needed.
         const errorMessage = data.message || "Registration failed. Please try again.";
         let finalErrorMessage = errorMessage;
 
         if (data.errors) {
           const firstError = Object.values(data.errors)[0][0];
-          console.log('Specific server error:', firstError);
-          finalErrorMessage = firstError; 
+          finalErrorMessage = firstError;
         }
-        console.log('Registration failed. Server message:', finalErrorMessage);
         return navigation.navigate('Regerror', { errorMessage: finalErrorMessage });
       }
     } catch (e) {
-      console.error("Registration error (catch block):", e.message); 
-      return navigation.navigate('Regerror', { errorMessage: e.message || "An unexpected network error occurred. Please try again." });
+      console.error("Full network error object (axios):", e);
+      if (e.response) {
+        // The request was made and the server responded with a status code
+        // that falls out of the range of 2xx
+        console.error("Axios error response data:", e.response.data);
+        console.error("Axios error response status:", e.response.status);
+        console.error("Axios error response headers:", e.response.headers);
+        const serverMessage = e.response.data?.message;
+        const validationErrors = e.response.data?.errors;
+        let finalErrorMessage = serverMessage || `Server error: ${e.response.status}`; // Default to server message or status
+        // If validation errors exist, take the first message from the first field
+        if (validationErrors && typeof validationErrors === 'object' && Object.keys(validationErrors).length > 0) {
+            finalErrorMessage = Object.values(validationErrors)[0]?.[0] || finalErrorMessage;
+        }
+        return navigation.navigate('Regerror', { errorMessage: finalErrorMessage });
+      } else if (e.request) {
+        // The request was made but no response was received
+        console.error("Axios error request (no response received):", e.request);
+        return navigation.navigate('Regerror', { errorMessage: "No response from server. Check network connection and server status." });
+      } else {
+        // Something happened in setting up the request that triggered an Error
+        console.error('Axios setup error message:', e.message);
+        return navigation.navigate('Regerror', { errorMessage: e.message || "An unexpected error occurred while setting up the request." });
+      }
     }
     finally {
-      setIsLoading(false); 
+      setIsLoading(false);
     }
   };
-
   return (
     <ScrollView style={styles.scrollContainer} contentContainerStyle={styles.contentContainer} keyboardShouldPersistTaps="handled">
       <View style={{ marginBottom: spacing.l }}>
@@ -149,7 +172,7 @@ const Register = ({ navigation }) => {
         onChangeText={setConfirmPassword}
       />
 
-  
+
       <View style={styles.inputRow}>
         <Text style={styles.label}>Country</Text>
         <View style={styles.inputBox}>
@@ -170,7 +193,7 @@ const Register = ({ navigation }) => {
         </View>
       </View>
 
- 
+
       <View style={styles.inputRow}>
         <Text style={styles.label}>Address</Text>
         <TextInput
@@ -184,11 +207,11 @@ const Register = ({ navigation }) => {
         />
       </View>
 
- 
+
       <TouchableOpacity
         style={styles.registerButton}
         onPress={handleRegister}
-        disabled={isLoading}> 
+        disabled={isLoading}>
         <Text style={styles.registerButtonText}>{isLoading ? 'REGISTERING...' : 'REGISTER'}</Text>
       </TouchableOpacity>
 
