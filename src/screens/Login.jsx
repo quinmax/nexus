@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, Image, StyleSheet, ScrollView } from 'react-native';
+import axios from 'axios'; 
 import { colors, typography, spacing, borders, commonStyles } from '../theme/theme';
 
 const Login = ({ navigation }) => {
@@ -8,74 +9,76 @@ const Login = ({ navigation }) => {
   const [error, setError] = useState('');
 
   const handleLogin = async () => {
-    console.log('handleLogin function called'); // <-- Add this very first line
-    console.log('Current email:', email, 'Current password:', password); // <-- Log current values
-    setError(''); // Clear previous errors
+    console.log('handleLogin function called');
+    console.log('Current email:', email, 'Current password:', password);
+    setError('');
     if (!email || !password) {
-      console.log('Validation failed: Email or password is empty.'); // <-- Log if validation fails
+      console.log('Validation failed: Email or password is empty.');
       setError('Please enter both email and password.');
       return;
     }
 
     try {
-      console.log('Attempting to fetch from: http://192.168.101.112:8000/api/login');
-      // Replace with your actual Laravel backend IP/domain if not localhost
-      // For Android emulator, use 10.0.2.2 to access localhost of the host machine
-      // For iOS simulator, localhost usually works. For physical devices, use your machine's network IP.
-      const response = await fetch('http://192.168.101.112:8000/api/login', { // Example for Android Emulator
-        method: 'POST',
-        headers: {
+      const url = 'http://192.168.23.113/api/login';
+      console.log('Attempting POST with axios to:', url);
+
+      const response = await axios.post(url,
+        {
+          email,
+          password,
+        },
+        {
+          headers: {
           'Content-Type': 'application/json',
           'Accept': 'application/json',
-        },
-        body: JSON.stringify({ email, password }),
-      });
-      console.log('Fetch call completed. Response received.');
-      console.log('Login response status:', response.status); // Log status
-      // console.log('Response headers:', JSON.stringify(Object.fromEntries(response.headers.entries()))); // Optional: Log all headers
+          }
+        }
+      );
 
-      console.log('Attempting to parse response as JSON...');
-      const data = await response.json();
-      console.log('Response parsed as JSON successfully.');
-      console.log('Login response data:', data); // Log data
+      console.log("Axios request response status:", response.status);
+      console.log("Axios response data:", response.data);
 
-      if (response.ok) {
+      const data = response.data;
+
+      if (response.status >= 200 && response.status < 300) {
         console.log('Login successful:', data);
-        // TODO: Store the token securely (e.g., AsyncStorage)
-        navigation.navigate('Profile'); // Navigate to the Profile screen
-      } else if (response.status === 403 && data.message && data.message.includes('Email not verified')) {
-        console.log('Setting "Email not verified" error:', data.message); // Log before setError
-        setError(data.message + " You might need to check your spam folder.");
+        const userData = data.user;
+        navigation.navigate('Profile', { user: userData });
       } else {
-        console.log('Setting generic login error:', data.message || 'Login failed.'); // Log before setError
         setError(data.message || 'Login failed. Please check your credentials.');
       }
     } catch (e) {
-      console.error('Login fetch/catch error:', e); // More specific log
-      console.error('Error Name:', e.name);
-      console.error('Error Message:', e.message);
-      // It's possible e.stack is not available or very large, log conditionally or inspect `e` directly
-      // console.error('Error Stack:', e.stack);
-      setError('An unexpected error occurred. Please try again.');
+      console.error("Full network error object (axios):", e);
+      if (e.response) {
+        console.error("Axios error response data:", e.response.data);
+        console.error("Axios error response status:", e.response.status);
+        const serverMessage = e.response.data?.message;
+        if (e.response.status === 403 && serverMessage && serverMessage.includes('Email not verified')) {
+          setError(serverMessage + " You might need to check your spam folder.");
+        } else {
+          setError(serverMessage || `Login failed: ${e.response.status}`);
+        }
+      } else if (e.request) {
+        console.error("Axios error request (no response received):", e.request);
+        setError("Network request failed. Check server connection and IP address.");
+      } else {
+        console.error('Axios setup error message:', e.message);
+        setError(e.message || "An unexpected error occurred while setting up the request.");
+      }
     }
   };
 
   return (
     <ScrollView contentContainerStyle={styles.scrollContainer} keyboardShouldPersistTaps="handled">
-      {/* Logo */}
       <Image
-        source={require('../assets/nexus_logo.png')} // Update with your logo path
+        source={require('../assets/nexus_logo.png')}
         style={styles.logo}
         resizeMode="contain"
       />
-
-      {/* Welcome Text */}
       <Text style={styles.welcomeText}>Welcome to Nexus Wallet</Text>
-
-      {/* Email Input */}
       <TextInput
         style={styles.input}
-        placeholder="Email Address" // Consider "Email" for brevity
+        placeholder="Email Address"
         placeholderTextColor={colors.textPlaceholder}
         keyboardType="email-address"
         autoCapitalize="none"
@@ -85,11 +88,9 @@ const Login = ({ navigation }) => {
           setEmail(text);
         }}
       />
-
-      {/* Password Input */}
       <TextInput
         style={styles.input}
-        placeholder="Password" // Consistent placeholder color
+        placeholder="Password"
         placeholderTextColor={colors.textPlaceholder}
         secureTextEntry
         value={password}
@@ -98,25 +99,31 @@ const Login = ({ navigation }) => {
           setPassword(text);
         }}
       />
-
-      {/* Error Message Display */}
       {error ? (
         <Text style={styles.errorText}>{error}</Text>
       ) : null}
-
-      {/* Login Button */}
       <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
         <Text style={styles.loginButtonText}>LOGIN</Text>
       </TouchableOpacity>
 
-      {/* Links Container */}
-      <View style={styles.linksContainer}>
-        <TouchableOpacity onPress={() => navigation.navigate('Register')}>
-          <Text style={styles.linkText}>Register</Text>
-        </TouchableOpacity>
-        
-        <TouchableOpacity onPress={() => navigation.navigate('Reset')}>
-          <Text style={styles.linkText}>Forgot details</Text>
+      {/* Forgot Details Button */}
+      <TouchableOpacity
+        style={styles.loginButton} 
+        onPress={() => navigation.navigate('Reset')}
+      >
+        <Text style={styles.loginButtonText}>FORGOT DETAILS</Text> 
+      </TouchableOpacity>
+
+      
+      <View style={styles.spacer} />
+
+     
+      <View style={styles.registerButtonContainer}>
+        <TouchableOpacity
+          style={styles.loginButton} 
+          onPress={() => navigation.navigate('Register')}
+        >
+          <Text style={styles.loginButtonText}>REGISTER</Text> 
         </TouchableOpacity>
       </View>
     </ScrollView>
@@ -124,63 +131,59 @@ const Login = ({ navigation }) => {
 };
 
 const styles = StyleSheet.create({
-  // safeArea: { ...commonStyles.safeArea }, // If using SafeAreaView as root
-  scrollContainer: { // Changed from 'container' to be more specific
-    flexGrow: 1, // Use flexGrow for ScrollView content
+  scrollContainer: {
+    flexGrow: 1,
     backgroundColor: colors.background,
     alignItems: 'center',
     justifyContent: 'center',
     padding: spacing.containerPadding,
   },
   logo: {
-    width: 220, // Increased width
-    height: 220, // Increased height
+    width: 180,
+    height: 180,
     marginBottom: spacing.xl,
   },
   welcomeText: {
-    ...typography.h2, // Use themed typography
+    ...typography.h2,
     color: colors.textPrimary,
-    marginBottom: spacing.xl + spacing.s, // 40
+    marginBottom: spacing.xl + spacing.s,
   },
   input: {
     width: '100%',
     height: 50,
-    backgroundColor: colors.inputBackground, // Themed input
+    backgroundColor: colors.inputBackground,
     color: colors.inputText,
     borderRadius: borders.radiusMedium,
     paddingHorizontal: spacing.inputPaddingHorizontal,
-    marginBottom: spacing.l, // 20-24
+    marginBottom: spacing.l,
     fontSize: typography.body.fontSize,
     borderWidth: borders.borderWidth,
-    borderColor: colors.inputBorder, // Themed border
+    borderColor: colors.inputBorder,
   },
-  loginButton: {
+  loginButton: { 
     width: '100%',
     height: 50,
-    backgroundColor: '#1f2531', // Updated color for the LOGIN button
+    backgroundColor: '#1f2531', 
     borderRadius: borders.radiusMedium,
     alignItems: 'center',
     justifyContent: 'center',
-    marginTop: spacing.m, // Adjusted margin if error text is present
+    marginTop: spacing.l, 
   },
-  loginButtonText: { // Renamed from buttonText
+  loginButtonText: { 
     ...typography.button,
-    color: colors.primaryButtonText,
+    color: colors.primaryButtonText, 
   },
-  linksContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+  
+  spacer: {
+    flex: 1,
+  },
+  registerButtonContainer: {
     width: '100%',
-    marginTop: spacing.xl, // 30-32
-  },
-  linkText: {
-    ...typography.link, // Use themed link style
-    color: colors.primary, // Changed to use the theme's primary color
-    textDecorationLine: 'underline', // Added to underline the text
+   
   },
   errorText: {
     ...typography.body,
-    color: colors.error, // Assuming you have an error color in your theme
+    color: colors.error,
     marginBottom: spacing.m,
     textAlign: 'center',
   },

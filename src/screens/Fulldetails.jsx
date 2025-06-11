@@ -5,18 +5,10 @@ import ProfileIcon from '../assets/ProfileIcon.jsx'; // Re-using ProfileIcon, or
 import BottomNavBar from '../components/BottomNavBar.jsx';
 import { colors, typography, spacing, borders, commonStyles } from '../theme/theme';
 
-const FulldetailsScreen = ({ navigation }) => {
-  // Placeholder data - In a real app, this would come from state/props/API
-  const userDetails = {
-    accountName: "Andre Combrinck",
-    fullName: "Andre Combrinck",
-    surname: "Combrinck",
-    emailAddress: "andre.combrinck@example.com",
-    confirmEmail: "andre.combrinck@example.com", // Usually not displayed, but was in Register.jsx
-    country: "South Africa",
-    address: "123 Nexus Street, Walletville, WC 12345",
-  };
-
+const FulldetailsScreen = ({ route, navigation }) => {
+  // Extract user data passed from ProfileScreen
+  const user = route.params?.user || {};
+  
   const DetailItem = ({ label, value }) => (
     <View style={styles.detailItem}>
       <Text style={styles.detailLabel}>{label}</Text>
@@ -35,22 +27,21 @@ const FulldetailsScreen = ({ navigation }) => {
         keyboardShouldPersistTaps="handled"
       >
         <View style={styles.mainContentArea}>
-          <DetailItem label="Account name" value={userDetails.accountName} />
-          <DetailItem label="Full name" value={userDetails.fullName} />
-          <DetailItem label="Surname" value={userDetails.surname} />
-          <DetailItem label="Email address" value={userDetails.emailAddress} />
-          {/* <DetailItem label="Confirm email" value={userDetails.confirmEmail} /> */}
-          <DetailItem label="Country" value={userDetails.country} />
-          <DetailItem label="Address" value={userDetails.address} />
+          <DetailItem label="Account name" value={user.account_name || 'N/A'} />
+          <DetailItem label="Full name" value={user.full_name || 'N/A'} />
+          <DetailItem label="Surname" value={user.surname || 'N/A'} />
+          <DetailItem label="Email address" value={user.email || 'N/A'} />
+          <DetailItem label="Country" value={user.country || 'N/A'} />
+          <DetailItem label="Address" value={user.address || 'N/A'} />
 
-          {/* SAVE Button */}
-          <TouchableOpacity style={styles.saveButton} onPress={() => console.log('Save button pressed')}>
-            <Text style={styles.saveButtonText}>SAVE</Text>
-          </TouchableOpacity>
+          {/* Support Text */}
+          <Text style={styles.supportText}>
+            To change any of your details please email us at support@nexus.com
+          </Text>
 
-          {/* Back to Profile Link */}
-          <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backLinkContainer}>
-            <Text style={styles.backLinkText}>Back to Profile</Text>
+          {/* BACK Button */}
+          <TouchableOpacity style={styles.actionButton} onPress={() => navigation.goBack()}>
+            <Text style={styles.actionButtonText}>BACK</Text>
           </TouchableOpacity>
         </View>
       </ScrollView>
@@ -85,33 +76,29 @@ const styles = StyleSheet.create({
     borderRadius: borders.radiusMedium,
     paddingVertical: spacing.inputPaddingVertical,
     paddingHorizontal: spacing.inputPaddingHorizontal,
-    // minHeight: 48, // Ensure a consistent tap target height if these become editable
     justifyContent: 'center',
   },
   detailValue: {
     ...typography.body,
     color: colors.inputText,
   },
-  saveButton: {
-    backgroundColor: '#1f2531', // Match Login button color
+  actionButton: { 
+    backgroundColor: '#1f2531', 
     paddingVertical: spacing.m,
     borderRadius: borders.radiusMedium,
     alignItems: 'center',
-    marginTop: spacing.xl, // Space above the save button
-    marginBottom: spacing.m, // Space below the save button, before "Back to Profile"
+    marginTop: spacing.l, // Adjusted margin for the new text
   },
-  saveButtonText: {
+  actionButtonText: { 
     ...typography.button,
     color: colors.primaryButtonText,
   },
-  backLinkContainer: {
+  supportText: {
+    ...typography.body,
+    color: colors.textSecondary,
+    textAlign: 'center',
     marginTop: spacing.xl,
-    alignItems: 'center', // Center the link
-  },
-  backLinkText: {
-    ...typography.link,
-    color: colors.primary, // Changed to match 'View/Edit full account details' link
-    textDecorationLine: 'underline',
+    marginBottom: spacing.m,
   },
 });
 
