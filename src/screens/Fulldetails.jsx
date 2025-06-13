@@ -1,14 +1,28 @@
-import React from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
+import React, { useContext } from 'react'; // Import useContext
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, ActivityIndicator } from 'react-native'; // Added ActivityIndicator
 import ScreenHeader from '../components/ScreenHeader.jsx';
 import ProfileIcon from '../assets/ProfileIcon.jsx'; // Re-using ProfileIcon, or create a new one
 import BottomNavBar from '../components/BottomNavBar.jsx';
 import { colors, typography, spacing, borders, commonStyles } from '../theme/theme';
+import { AuthContext } from '../context/AuthContext.jsx'; // Import AuthContext
 
 const FulldetailsScreen = ({ route, navigation }) => {
-  // Extract user data passed from ProfileScreen
-  const user = route.params?.user || {};
-  
+  const { user, isLoading: isAuthLoading } = useContext(AuthContext); // Get user from AuthContext
+
+  if (isAuthLoading || !user) {
+    // Show a loading indicator or a placeholder if user data isn't available yet
+    return (
+      <View style={styles.safeArea}>
+        <ScreenHeader title="FULL DETAILS" RightIconComponent={ProfileIcon} />
+        <View style={commonStyles.centeredMessageContainer}>
+          <ActivityIndicator size="large" color={colors.primary} />
+          <Text style={commonStyles.loadingText}>Loading Details...</Text>
+        </View>
+        <BottomNavBar navigation={navigation} />
+      </View>
+    );
+  }
+
   const DetailItem = ({ label, value }) => (
     <View style={styles.detailItem}>
       <Text style={styles.detailLabel}>{label}</Text>

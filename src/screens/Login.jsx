@@ -1,12 +1,15 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react'; // Import useContext
 import { View, Text, TextInput, TouchableOpacity, Image, StyleSheet, ScrollView } from 'react-native';
-import axios from 'axios'; 
+// import axios from 'axios'; // No longer needed here for login
+// import AsyncStorage from '@react-native-async-storage/async-storage'; // No longer needed here for login
 import { colors, typography, spacing, borders, commonStyles } from '../theme/theme';
+import { AuthContext } from '../context/AuthContext'; // Import AuthContext
 
 const Login = ({ navigation }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const { login, isLoading: isAuthLoading, authError } = useContext(AuthContext); // Use login and isLoading from context
 
   const handleLogin = async () => {
     console.log('handleLogin function called');
@@ -19,52 +22,19 @@ const Login = ({ navigation }) => {
     }
 
     try {
-      const url = 'http://192.168.23.113/api/login';
-      console.log('Attempting POST with axios to:', url);
-
-      const response = await axios.post(url,
-        {
-          email,
-          password,
-        },
-        {
-          headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json',
-          }
-        }
-      );
-
-      console.log("Axios request response status:", response.status);
-      console.log("Axios response data:", response.data);
-
-      const data = response.data;
-
-      if (response.status >= 200 && response.status < 300) {
-        console.log('Login successful:', data);
-        const userData = data.user;
+      const userData = await login(email, password); // Call context login function
+      if (userData) {
+        // Navigation to Profile or Wallet can happen here.
+        // The AuthContext now holds the user state.
         navigation.navigate('Profile', { user: userData });
-      } else {
-        setError(data.message || 'Login failed. Please check your credentials.');
+        // Consider navigating to Wallet directly if that's the primary screen after login
+        // navigation.navigate('Wallet');
       }
     } catch (e) {
-      console.error("Full network error object (axios):", e);
-      if (e.response) {
-        console.error("Axios error response data:", e.response.data);
-        console.error("Axios error response status:", e.response.status);
-        const serverMessage = e.response.data?.message;
-        if (e.response.status === 403 && serverMessage && serverMessage.includes('Email not verified')) {
-          setError(serverMessage + " You might need to check your spam folder.");
-        } else {
-          setError(serverMessage || `Login failed: ${e.response.status}`);
-        }
-      } else if (e.request) {
-        console.error("Axios error request (no response received):", e.request);
-        setError("Network request failed. Check server connection and IP address.");
-      } else {
-        console.error('Axios setup error message:', e.message);
-        setError(e.message || "An unexpected error occurred while setting up the request.");
-      }
+      console.error("Login.jsx: Login failed via context", e.message);
+      // The authError state in AuthContext will also be set.
+      // You can use that globally or set local error here.
+      setError(e.message || "Login failed. Please check your credentials.");
     }
   };
 
@@ -102,16 +72,20 @@ const Login = ({ navigation }) => {
       {error ? (
         <Text style={styles.errorText}>{error}</Text>
       ) : null}
-      <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
-        <Text style={styles.loginButtonText}>LOGIN</Text>
+      {/* Update button to reflect loading state from context */}
+      <TouchableOpacity 
+        style={[styles.loginButton, isAuthLoading && commonStyles.buttonDisabled]} 
+        onPress={handleLogin}
+        disabled={isAuthLoading}>
+        <Text style={styles.loginButtonText}>{isAuthLoading ? 'LOGGING IN...' : 'LOGIN'}</Text>
       </TouchableOpacity>
 
       {/* Forgot Details Button */}
       <TouchableOpacity
-        style={styles.loginButton} 
+        style={[styles.loginButton, styles.secondaryButton]}
         onPress={() => navigation.navigate('Reset')}
       >
-        <Text style={styles.loginButtonText}>FORGOT DETAILS</Text> 
+        <Text style={[styles.loginButtonText, styles.secondaryButtonText]}>FORGOT DETAILS</Text>
       </TouchableOpacity>
 
       
@@ -120,10 +94,10 @@ const Login = ({ navigation }) => {
      
       <View style={styles.registerButtonContainer}>
         <TouchableOpacity
-          style={styles.loginButton} 
+          style={[styles.loginButton, styles.secondaryButton]}
           onPress={() => navigation.navigate('Register')}
         >
-          <Text style={styles.loginButtonText}>REGISTER</Text> 
+          <Text style={[styles.loginButtonText, styles.secondaryButtonText]}>REGISTER</Text>
         </TouchableOpacity>
       </View>
     </ScrollView>
@@ -173,7 +147,17 @@ const styles = StyleSheet.create({
     ...typography.button,
     color: colors.primaryButtonText, 
   },
-  
+  secondaryButton: { // New style for FORGOT DETAILS and REGISTER
+    backgroundColor: colors.surface, // Lighter background
+    borderColor: '#1f2531',         // Border color matching the LOGIN button's background
+    borderWidth: borders.borderWidth,
+    // marginTop is inherited from loginButton
+  },
+  secondaryButtonText: { // New text style for these buttons
+    color: colors.primaryButtonText, // Darker text for lighter background
+    // If colors.primaryButtonText was white, this ensures readability.
+    // If you want white text on the lighter button, use colors.primaryButtonText here too.
+  },
   spacer: {
     flex: 1,
   },

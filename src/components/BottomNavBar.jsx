@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react'; // Import useContext
 import { View, TouchableOpacity, Text, StyleSheet, Dimensions } from 'react-native';
 
 // Import your JSX icon components
@@ -7,13 +7,22 @@ import WalletIcon from '../assets/WalletIcon.jsx';
 import HistoryIcon from '../assets/HistoryIcon.jsx';
 import ExchangeIcon from '../assets/ExchangeIcon.jsx';
 import HelpIcon from '../assets/HelpIcon.jsx';
+import { AuthContext } from '../context/AuthContext'; // Import AuthContext
+import { AppSettingsContext } from '../context/AppSettingsContext'; // Import AppSettingsContext
 
 const { width } = Dimensions.get('window');
 
 const BottomNavBar = ({ navigation }) => {
-  // Placeholder navigation functions. Replace with your actual navigation logic.
-  const navigateToProfile = () => navigation.navigate('Profile');
-  const navigateToWallet = () => navigation.navigate('Wallet');
+  const { user } = useContext(AuthContext); // Get user from context
+  const { appSettings } = useContext(AppSettingsContext); // Get appSettings from context
+
+  const navigateToProfile = () => {
+    // Screens will get user/appSettings from context
+    navigation.navigate('Profile');
+  };
+  const navigateToWallet = () => {
+    navigation.navigate('Wallet');
+  };
   const navigateToHistory = () => navigation.navigate('History');
   const navigateToExchange = () => navigation.navigate('Exchange');
   const navigateToHelp = () => navigation.navigate('Help');

@@ -7,10 +7,14 @@ import BottomNavBar from '../components/BottomNavBar.jsx'; // Make sure this pat
 import ScreenHeader from '../components/ScreenHeader.jsx'; // Import reusable header
 import { colors, typography, spacing, commonStyles } from '../theme/theme'; // Import theme
 
-const Sent = ({ navigation }) => {
+const Sent = ({ route, navigation }) => {
+  const { transactionDetails } = route.params || {};
+
   const handleBackToWallet = () => {
     navigation.navigate('Wallet');
   };
+
+  const displayMessage = transactionDetails?.message || "Send transaction successful";
 
   return (
     <View style={commonStyles.safeArea}>
@@ -22,7 +26,17 @@ const Sent = ({ navigation }) => {
       >
         {/* Main Content Area */}
         <View style={styles.contentBody}>
-          <Text style={styles.successText}>Send transaction successful</Text>
+          <Text style={styles.successText}>{displayMessage}</Text>
+          {transactionDetails && (
+            <View style={styles.detailsContainer}>
+              {transactionDetails.recipient_account_number && (
+                <Text style={styles.detailText}>To Account: {transactionDetails.recipient_account_number}</Text>
+              )}
+              {typeof transactionDetails.amount === 'number' && (
+                <Text style={styles.detailText}>Amount: {transactionDetails.amount.toFixed(3)} Oz</Text>
+              )}
+            </View>
+          )}
           <TouchableOpacity onPress={handleBackToWallet} style={styles.backButton}>
             <Text style={styles.backButtonText}>Back to Wallet</Text>
           </TouchableOpacity>
@@ -57,6 +71,15 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginBottom: spacing.xl + spacing.l, // More space before the "Back" button
     lineHeight: typography.h2.fontSize * 1.4, // Improve readability for multi-line text
+  },
+  detailsContainer: {
+    marginBottom: spacing.l,
+    alignItems: 'center',
+  },
+  detailText: {
+    ...typography.body,
+    color: colors.textSecondary,
+    marginBottom: spacing.xs,
   },
   backButton: {
     alignSelf: 'center', // Ensure it's centered if contentBody alignItems changes

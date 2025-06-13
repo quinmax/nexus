@@ -102,5 +102,9 @@ export const commonStyles = {
     flex: 1,
     backgroundColor: colors.background,
   },
+  errorText: { // Added error text style
+    color: colors.error,
+    // You can add other common error text styles here, like fontSize or textAlign if needed
+  },
   // Add other common styles like screen containers if needed
 };

@@ -1,34 +1,47 @@
-import React from 'react';
-import { View, Text, Image, StyleSheet, ScrollView } from 'react-native';
+import React, { useContext } from 'react'; // Import useContext
+import { View, Text, Image, StyleSheet, ScrollView, ActivityIndicator } from 'react-native'; // Added ActivityIndicator
 
 // Import assets and components
 import NexusLogo from '../assets/nexus_logo.png';
 import HelpIcon from '../assets/HelpIcon.jsx'; // Ensure this path and component exist
 import BottomNavBar from '../components/BottomNavBar.jsx'; // Ensure this path is correct
+import ScreenHeader from '../components/ScreenHeader.jsx'; // Assuming standard header
+import { colors, typography, spacing, commonStyles } from '../theme/theme.js'; // Import theme
+import { AuthContext } from '../context/AuthContext.jsx'; // Optional, if help might be user-specific
+import { AppSettingsContext } from '../context/AppSettingsContext.jsx'; // Optional, if help content depends on settings
 
 const Help = ({ navigation }) => {
+  // const { user, isLoading: isAuthLoading } = useContext(AuthContext); // Uncomment if needed
+  // const { appSettings, isLoadingSettings, settingsError } = useContext(AppSettingsContext); // Uncomment if needed
+
+  // Example loading state if contexts were used:
+  // if (isAuthLoading || isLoadingSettings) {
+  //   return (
+  //     <View style={commonStyles.safeArea}>
+  //       <ScreenHeader title="HELP" RightIconComponent={HelpIcon} />
+  //       <View style={commonStyles.centeredMessageContainer}>
+  //         <ActivityIndicator size="large" color={colors.primary} />
+  //       </View>
+  //       <BottomNavBar navigation={navigation} />
+  //     </View>
+  //   );
+  // }
+
   return (
-    <View style={styles.safeArea}>
+    <View style={commonStyles.safeArea}>
       <ScrollView
         style={styles.scrollView}
         contentContainerStyle={styles.scrollContentContainer}
         keyboardShouldPersistTaps="handled"
       >
         {/* Header Section: Logo, Title, Icon */}
-        <View style={styles.headerContainer}>
-          <Image source={NexusLogo} style={styles.logo} />
-          <Text style={styles.headerTitle}>HELP</Text>
-          {/*
-            Assuming HelpIcon is an SVG component similar to your other icons.
-            Adjust width, height, and color props as needed.
-          */}
-          <HelpIcon width={28} height={28} color="#FFFFFF" />
-        </View>
+        <ScreenHeader title="HELP" RightIconComponent={HelpIcon} />
 
         {/* Main Content Area - Blank for now */}
         <View style={styles.mainContentArea}>
           {/* This area is intentionally blank as per requirements */}
           {/* You can add content here later, e.g., FAQs, contact info */}
+          <Text style={styles.placeholderText}>Help content coming soon.</Text>
         </View>
       </ScrollView>
       <BottomNavBar navigation={navigation} />
@@ -38,45 +51,29 @@ const Help = ({ navigation }) => {
 
 const styles = StyleSheet.create({
   safeArea: {
-    flex: 1,
-    backgroundColor: '#000000', // Black background
+    // Now using commonStyles.safeArea
   },
   scrollView: {
     flex: 1,
   },
   scrollContentContainer: {
     flexGrow: 1, // Ensure content can fill space or scroll
-    paddingBottom: 80, // Space for BottomNavBar
-  },
-  headerContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingHorizontal: 15,
-    paddingTop: 15, // Adjust for status bar if necessary
-    paddingBottom: 10,
-    borderBottomWidth: 1,
-    borderBottomColor: '#333333', // Consistent border color
-  },
-  logo: {
-    width: 30, // Small logo
-    height: 30,
-    resizeMode: 'contain',
-  },
-  headerTitle: {
-    color: '#FFFFFF',
-    fontSize: 20,
-    fontWeight: 'bold',
+    paddingBottom: spacing.xl + spacing.xl, // Space for BottomNavBar
   },
   mainContentArea: {
     flex: 1, // This will make the blank area take up available space
     justifyContent: 'center', // Optional: if you want to center placeholder text later
     alignItems: 'center',     // Optional: if you want to center placeholder text later
-    padding: 20,
+    padding: spacing.containerPadding,
     // Add any specific styling for the blank area if needed in the future
     // For example, a placeholder text:
     // <Text style={{ color: '#555555' }}>Help content will appear here.</Text>
   },
+  placeholderText: {
+    ...typography.body,
+    color: colors.textSecondary,
+    textAlign: 'center',
+  }
 });
 
 export default Help;
